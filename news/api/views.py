@@ -12,10 +12,8 @@ from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser,
     IsAuthenticatedOrReadOnly,
-
-
-
 )
+from .pagination import PostLimitOffsetPagination, PostPageNumberPagination
 
 from rest_framework.filters import SearchFilter, OrderingFilter
 from news.models import Post
@@ -59,6 +57,7 @@ class PostListAPIView(ListAPIView):
     serializer_class = PostListSerializer
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["title", "content"]
+    pagination_class = PostPageNumberPagination #PageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
         queryset_list = Post.objects.all()
