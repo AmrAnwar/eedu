@@ -3,24 +3,21 @@ education platform API
 
 ## To do List
 
-* [T] Posts model
-* [T] Answers model
-* [ ] comments model
-* [x] ASK model
-* [x] words model
-* [x] data model
+* [x] Posts model
+* [x] Answers model
+* [x] comments model
+* [ ] ASK model
+* [ ] words model
+* [ ] data model
 --------------------
-* [x] record
+* [ ] record
 -------------------
-* [x] upload e-book
+* [ ] upload e-book
 ---------------------
-* [T] api news
+* [x] api news
 * [x] api Answers
-* [x] api comments
-* [x] api ask
-* [x] api words
+* [ ] api comments
+* [ ] api ask
+* [ ] api words
 -------------------
 * [x] token
-
-ـــــــــــــــISSUESـــــــــــ
-* [x] filter according to field objects
