@@ -13,9 +13,29 @@ post_delete_url = HyperlinkedIdentityField(
     view_name='news-api:delete',
     lookup_field='slug',
 )
+post_edit_url = HyperlinkedIdentityField(
+    view_name='news-api:edit',
+    lookup_field='slug',
+)
+
+
+class PostCreateUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = Post
+        fields = [
+            'title',
+            'content',
+            'type',
+            'wait',
+            'image',
+            'file',
+        ]
 
 
 class PostDetailSerializer(ModelSerializer):
+    delete_url = post_delete_url
+    edit_url = post_edit_url
+    type = SerializerMethodField()
     class Meta:
         model = Post
         fields = [
@@ -26,12 +46,19 @@ class PostDetailSerializer(ModelSerializer):
             'file',
             'timestamp',
             'content',
+            'delete_url',
+            'edit_url',
+
         ]
+
+    def get_type(self, obj):
+        return obj.get_type_display()
 
 
 class PostListSerializer(ModelSerializer):
     url = post_url
     delete_url = post_delete_url
+    edit_url = post_edit_url
 
     class Meta:
         model = Post
@@ -43,4 +70,8 @@ class PostListSerializer(ModelSerializer):
             'image',
             'timestamp',
             'delete_url',
+            'edit_url',
         ]
+
+    def get_type(self, obj):
+        return obj.get_type_display()
