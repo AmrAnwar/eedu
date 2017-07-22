@@ -49,6 +49,7 @@ class PostDetailSerializer(ModelSerializer):
             'file',
             'timestamp',
             'content',
+            'wait',
             'delete_url',
             'edit_url',
 

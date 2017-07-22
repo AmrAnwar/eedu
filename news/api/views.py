@@ -60,13 +60,30 @@ class PostListAPIView(ListAPIView):
     pagination_class = PostPageNumberPagination #PageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
-        queryset_list = Post.objects.all()
+        queryset_list = Post.objects.filter(wait=False)
         query = self.request.GET.get("search")
         if query:
             queryset_list = queryset_list.filter(
                 Q(title__icontains=query) |
                 Q(content__icontains=query) |
-                Q(user__first_name__icontains=query) |
-                Q(user__last_name__icontains=query)
+                Q(user__username__icontains=query)
+            ).distinct()
+        return queryset_list
+
+
+class PostWaitListAPIView(ListAPIView):
+    serializer_class = PostListSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ["title", "content"]
+    pagination_class = PostPageNumberPagination
+
+    def get_queryset(self, *args, **kwargs):
+        queryset_list = Post.objects.filter(wait=True)
+        query = self.request.GET.get("search")
+        if query:
+            queryset_list = queryset_list.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(user__username__icontains=query)
             ).distinct()
         return queryset_list

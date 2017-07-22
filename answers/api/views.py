@@ -60,7 +60,25 @@ class AnswerListAPIView(ListAPIView):
     pagination_class = PostPageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
-        queryset_list = Answer.objects.all()
+        queryset_list = Answer.objects.filter(wait=False)
+        query = self.request.GET.get("search")
+        if query:
+            queryset_list = queryset_list.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(user__username__icontains=query)
+            ).distinct()
+        return queryset_list
+
+
+class AnswerWaitListAPIView(ListAPIView):
+    serializer_class = AnswerListSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ["title", "content"]
+    pagination_class = PostPageNumberPagination
+
+    def get_queryset(self, *args, **kwargs):
+        queryset_list = Answer.objects.filter(wait=True)
         query = self.request.GET.get("search")
         if query:
             queryset_list = queryset_list.filter(
