@@ -22,6 +22,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/news/', include("news.api.urls", namespace='news-api')),
+    url(r'^api/users/', include("accounts.api.urls", namespace='users-api')),
+
 ]
 
 if settings.DEBUG:

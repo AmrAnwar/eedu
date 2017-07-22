@@ -4,6 +4,7 @@ from rest_framework.serializers import (
     SerializerMethodField,
 )
 from news.models import Post
+from accounts.api.serializers import UserDetailSerializer
 
 post_url = HyperlinkedIdentityField(
     view_name='news-api:detail',
@@ -32,7 +33,9 @@ class PostCreateUpdateSerializer(ModelSerializer):
         ]
 
 
+
 class PostDetailSerializer(ModelSerializer):
+    user = UserDetailSerializer(read_only=True)
     delete_url = post_delete_url
     edit_url = post_edit_url
     type = SerializerMethodField()
@@ -56,6 +59,8 @@ class PostDetailSerializer(ModelSerializer):
 
 
 class PostListSerializer(ModelSerializer):
+    user = UserDetailSerializer(read_only=True)
+    type = SerializerMethodField()
     url = post_url
     delete_url = post_delete_url
     edit_url = post_edit_url
