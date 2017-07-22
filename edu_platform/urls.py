@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/news/', include("news.api.urls", namespace='news-api')),
     url(r'^api/users/', include("accounts.api.urls", namespace='users-api')),
+    url(r'^api/answers/', include("answers.api.urls", namespace='answers-api')),
 
 ]
 
