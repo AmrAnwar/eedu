@@ -40,12 +40,12 @@ class Post(models.Model):
     image = models.ImageField(
         upload_to=upload_location,
         null=False, blank=False,
-        height_field='height_field',
-        width_field='width_field',
+        height_field='height_field_image',
+        width_field='width_field_image',
     )
     file = models.FileField(null=True, blank=True)
-    height_field = models.IntegerField(default=0)
-    width_field = models.IntegerField(default=0)
+    height_field_image = models.IntegerField(default=0)
+    width_field_image = models.IntegerField(default=0)
 
     class Meta:
         ordering = ["-timestamp"]
