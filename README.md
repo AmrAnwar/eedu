@@ -22,6 +22,8 @@ education platform API
 -------------------
 * [x] token
 
-_____________Take Care__________
+-------------------------
+
+_________Take Care__________
 
 * Put in Rest 
