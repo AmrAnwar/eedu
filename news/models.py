@@ -53,8 +53,8 @@ class Post(models.Model):
     def __unicode__(self):
         return "%s:%s" % (self.user, self.title)
 
-    def get_absolute_url(self):
-        return reverse("news:detail", kwargs={'slug': self.slug})
+    # def get_absolute_url(self):
+    #     return reverse("news:detail", kwargs={'slug': self.slug})
 
 
 def create_slug(instance, new_slug=None):
