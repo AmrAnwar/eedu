@@ -8,7 +8,6 @@ education platform API
 * [x] comments model
 * [ ] ASK model
 * [ ] words model
-* [ ] data model
 --------------------
 * [ ] record
 -------------------
