@@ -1,0 +1,8 @@
+*.pyc
+venv/
+.idea/
+*.sqlite3
+edu_platform/settings.py
+edu_platform/wsgi.py
+media_cdn/
+static_cdn/
