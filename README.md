@@ -5,7 +5,7 @@ education platform API
 
 * [T] Posts model
 * [T] Answers model
-* [T] comments model
+* [ ] comments model
 * [x] ASK model
 * [x] words model
 * [x] data model
