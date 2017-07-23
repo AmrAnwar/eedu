@@ -14,6 +14,10 @@ class Unit(models.Model):
     user = models.ForeignKey(User, related_name='users')
     slug = models.SlugField(unique=True, null=True, blank=True)
     wait = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-timestamp"]
 
     def __str__(self):
         return self.title
@@ -23,6 +27,10 @@ class Word(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=500)
     unit = models.ForeignKey(Unit, related_name='units')
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-timestamp"]
 
     def __str__(self):
         return self.name

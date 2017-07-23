@@ -6,10 +6,9 @@ education platform API
 * [x] Posts model
 * [x] Answers model
 * [x] comments model
-* [ ] ASK model
-* [ ] words model
---------------------
-* [ ] record
+* [x] ASK model
+* [x] words model
+* [ ] Tests(Exams)
 -------------------
 * [ ] upload e-book
 ---------------------
@@ -22,6 +21,8 @@ education platform API
 * [x] token
 
 -------------------------
+* [ ] record
+
 
 _________Take Care__________
 
