@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'news',
     'answers',
     'comments',
+    'words',
+
 ]
 
 MIDDLEWARE = [
