@@ -62,21 +62,24 @@ class PostDetailSerializer(ModelSerializer):
 class PostListSerializer(ModelSerializer):
     user = UserDetailSerializer(read_only=True)
     type = SerializerMethodField()
-    url = post_url
+    # url = post_url
     delete_url = post_delete_url
     edit_url = post_edit_url
 
     class Meta:
         model = Post
         fields = [
-            'url',
+            # 'url',
             'id',
             'user',
             'type',
             'image',
+            'file',
+            'content',
             'timestamp',
             'delete_url',
             'edit_url',
+            #####
         ]
 
     def get_type(self, obj):

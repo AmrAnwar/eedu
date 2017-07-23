@@ -19,7 +19,7 @@ from .models import Post
 class PostModelAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('title', 'content', 'wait', 'image', 'file')
+            'fields': ('title', 'content', 'type', 'wait', 'image', 'file')
         }),
         ('Advanced options', {
             'classes': ('collapse',),

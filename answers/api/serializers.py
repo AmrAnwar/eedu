@@ -52,6 +52,7 @@ class AnswerDetailSerializer(ModelSerializer):
             'edit_url',
         ]
 
+
     def get_type(self, obj):
         return obj.get_type_display()
 
@@ -59,12 +60,13 @@ class AnswerDetailSerializer(ModelSerializer):
 class AnswerListSerializer(ModelSerializer):
     user = UserDetailSerializer(read_only=True)
     type = SerializerMethodField()
-    url = answer_url
-
+    # url = answer_url
+    delete_url = answer_delete_url
+    edit_url = answer_edit_url
     class Meta:
         model = Answer
         fields = [
-            'url',
+            # 'url',
             'id',
             'title',
             'user',
@@ -72,8 +74,10 @@ class AnswerListSerializer(ModelSerializer):
             'timestamp',
             'type',
             'file',
-            'wait',
+            # 'wait',
+            ######
+            'delete_url',
+            'edit_url',
     ]
-
     def get_type(self, obj):
         return obj.get_type_display()
