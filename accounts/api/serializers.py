@@ -83,7 +83,7 @@ class UserCreateSerializer(ModelSerializer):
 
 
 class UserLoginSerializer(ModelSerializer):
-    token = CharField(allow_blank=True, read_only=True)
+    # token = CharField(allow_blank=True, read_only=True)
     username = CharField(required=False, allow_blank=True)
     email = EmailField(label='Email Address', required=False, allow_blank=True)
 
@@ -93,7 +93,7 @@ class UserLoginSerializer(ModelSerializer):
             'username',
             'email',
             'password',
-            'token',
+            # 'token',
 
         ]
         extra_kwargs = {"password":
@@ -120,5 +120,5 @@ class UserLoginSerializer(ModelSerializer):
         if user_obj:
             if not user_obj.check_password(password):
                 raise ValidationError("Incorrect credentials please try again")
-        data['token'] = "SOME RaNoM Token"
+        # data['token'] = "SOME RaNoM Token"
         return data
