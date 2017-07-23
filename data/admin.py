@@ -14,5 +14,8 @@ class FileAdmin(admin.ModelAdmin):
             'fields': ('slug',),
         }),
     )
+    list_display = ['title', 'file', 'timestamp']
+    list_display_links = ['timestamp']
+    list_editable = ['title']
 
 admin.site.register(File, FileAdmin)

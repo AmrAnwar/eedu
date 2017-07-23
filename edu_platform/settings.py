@@ -39,10 +39,10 @@ INSTALLED_APPS = [
     #
     'rest_framework',
     #
+    'study',
     'news',
     'answers',
     'comments',
-    'words',
     'asks',
     'data',
 
