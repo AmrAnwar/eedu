@@ -26,3 +26,4 @@ education platform API
 _________Take Care__________
 
 * Put in Rest 
+* Delete in Rest
