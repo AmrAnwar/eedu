@@ -26,7 +26,7 @@ from .serializers import (
 class PostCreateAPIView(CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostCreateUpdateSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -49,6 +49,7 @@ class PostUpdateAPIView(RetrieveUpdateAPIView):
 
 class PostDeleteAPIView(DestroyAPIView):
     queryset = Post.objects.all()
+    permission_classes = [IsAdminUser]
     serializer_class = PostDetailSerializer
     lookup_field = 'slug'
 
@@ -57,7 +58,7 @@ class PostListAPIView(ListAPIView):
     serializer_class = PostListSerializer
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["title", "content"]
-    pagination_class = PostPageNumberPagination #PageNumberPagination
+    pagination_class = PostPageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
         queryset_list = Post.objects.filter(wait=False)
