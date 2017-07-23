@@ -27,6 +27,7 @@ class UserDetailSerializer(ModelSerializer):
 class UserCreateSerializer(ModelSerializer):
     email = EmailField(label='Email Address')
     email2 = EmailField(label='Confirm Email')
+    group = CharField(required=False, allow_blank=True)
 
     class Meta:
         model = User
@@ -35,6 +36,7 @@ class UserCreateSerializer(ModelSerializer):
             'email',
             'email2',
             'password',
+            'group',
 
         ]
         extra_kwargs = {"password":
@@ -67,6 +69,7 @@ class UserCreateSerializer(ModelSerializer):
         email2 = value
         if email1 != email2:
             raise ValidationError("Emails must match.")
+
         return value
 
     def create(self, validated_data):
@@ -79,6 +82,7 @@ class UserCreateSerializer(ModelSerializer):
         )
         user_obj.set_password(password)
         user_obj.save()
+        validated_data['group'] = "Normal"
         return validated_data
 
 
@@ -86,7 +90,7 @@ class UserLoginSerializer(ModelSerializer):
     # token = CharField(allow_blank=True, read_only=True)
     username = CharField(required=False, allow_blank=True)
     email = EmailField(label='Email Address', required=False, allow_blank=True)
-
+    group = CharField(required=False, allow_blank=True)
     class Meta:
         model = User
         fields = [
@@ -94,6 +98,7 @@ class UserLoginSerializer(ModelSerializer):
             'email',
             'password',
             # 'token',
+            'group',
 
         ]
         extra_kwargs = {"password":
@@ -120,5 +125,10 @@ class UserLoginSerializer(ModelSerializer):
         if user_obj:
             if not user_obj.check_password(password):
                 raise ValidationError("Incorrect credentials please try again")
-        # data['token'] = "SOME RaNoM Token"
+        data['username'] = user_obj.username
+        data['email'] = user_obj.email
+        if not user_obj.is_staff or not user_obj.is_superuser:
+            data['group'] = "Normal"
+        else:
+            data['group'] = "staff"
         return data
