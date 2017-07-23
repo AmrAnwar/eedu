@@ -8,23 +8,23 @@ education platform API
 * [x] comments model
 * [x] ASK model
 * [x] words model
+* [x] data model & api
 * [ ] Tests(Exams)
 -------------------
-* [ ] upload e-book
+* [x] upload e-book(data test)
 ---------------------
 * [x] api news
 * [x] api Answers
-* [ ] api comments
 * [ ] api ask
 * [ ] api words
+* [ ] api comments
 -------------------
 * [x] token
-
 -------------------------
 * [ ] record
-
 
 _________Take Care__________
 
 * Put in Rest 
 * Delete in Rest
+* user auth
