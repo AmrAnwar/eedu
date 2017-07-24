@@ -146,4 +146,5 @@ class UserLoginSerializer(ModelSerializer):
             data['group'] = "normal"
         else:
             data['group'] = "staff"
+        data['id'] = user_obj.id
         return data
