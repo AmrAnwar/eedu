@@ -74,8 +74,6 @@ class AnswerListSerializer(ModelSerializer):
             'timestamp',
             'type',
             'file',
-            # 'wait',
-            ######
             'delete_url',
             'edit_url',
     ]

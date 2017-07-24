@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^api/news/', include("news.api.urls", namespace='news-api')),
     url(r'^api/users/', include("accounts.api.urls", namespace='users-api')),
     url(r'^api/answers/', include("answers.api.urls", namespace='answers-api')),
+    url(r'^api/asks/', include("asks.api.urls", namespace='asks-api')),
 
 ]
 

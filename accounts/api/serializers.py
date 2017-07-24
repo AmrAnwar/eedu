@@ -1,27 +1,36 @@
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+
 from rest_framework.serializers import (
     CharField,
     EmailField,
     HyperlinkedIdentityField,
     ModelSerializer,
     SerializerMethodField,
-    ValidationError
+    ValidationError,
 )
 
 User = get_user_model()
 
+ask_user = HyperlinkedIdentityField(
+    view_name='asks-api:questions',
+    lookup_field='username',
+)
+
 
 class UserDetailSerializer(ModelSerializer):
+    questions_url = ask_user
     class Meta:
         model = User
         fields = [
             'username',
             'email',
-            'first_name',
-            'last_name',
+            'questions_url'
+            # 'first_name',
+            # 'last_name',
         ]
+
 
 
 class UserCreateSerializer(ModelSerializer):
@@ -91,12 +100,15 @@ class UserLoginSerializer(ModelSerializer):
     username = CharField(required=False, allow_blank=True)
     email = EmailField(label='Email Address', required=False, allow_blank=True)
     group = CharField(required=False, allow_blank=True)
+    questions_url = ask_user
+
     class Meta:
         model = User
         fields = [
             'username',
             'email',
             'password',
+            'questions_url',
             # 'token',
             'group',
 

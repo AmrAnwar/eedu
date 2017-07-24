@@ -62,28 +62,36 @@ class AnswerListAPIView(ListAPIView):
     def get_queryset(self, *args, **kwargs):
         queryset_list = Answer.objects.filter(wait=False)
         query = self.request.GET.get("search")
+        type = self.request.GET.get("type")
+        wait = self.request.GET.get("wait")
         if query:
             queryset_list = queryset_list.filter(
                 Q(title__icontains=query) |
                 Q(content__icontains=query) |
                 Q(user__username__icontains=query)
             ).distinct()
+        if type:
+            print type
+            queryset_list = queryset_list.filter(type=type)
+        if wait:
+            if wait == "true" or wait == "True":
+                queryset_list = queryset_list.filter(wait=True)
         return queryset_list
 
 
-class AnswerWaitListAPIView(ListAPIView):
-    serializer_class = AnswerListSerializer
-    filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ["title", "content"]
-    pagination_class = PostPageNumberPagination
-
-    def get_queryset(self, *args, **kwargs):
-        queryset_list = Answer.objects.filter(wait=True)
-        query = self.request.GET.get("search")
-        if query:
-            queryset_list = queryset_list.filter(
-                Q(title__icontains=query) |
-                Q(content__icontains=query) |
-                Q(user__username__icontains=query)
-            ).distinct()
-        return queryset_list
+# class AnswerWaitListAPIView(ListAPIView):
+#     serializer_class = AnswerListSerializer
+#     filter_backends = [SearchFilter, OrderingFilter]
+#     search_fields = ["title", "content"]
+#     pagination_class = PostPageNumberPagination
+#
+#     def get_queryset(self, *args, **kwargs):
+#         queryset_list = Answer.objects.filter(wait=True)
+#         query = self.request.GET.get("search")
+#         if query:
+#             queryset_list = queryset_list.filter(
+#                 Q(title__icontains=query) |
+#                 Q(content__icontains=query) |
+#                 Q(user__username__icontains=query)
+#             ).distinct()
+#         return queryset_list

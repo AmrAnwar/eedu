@@ -28,3 +28,4 @@ _________Take Care__________
 * Put in Rest 
 * Delete in Rest
 * user auth
+* get by
