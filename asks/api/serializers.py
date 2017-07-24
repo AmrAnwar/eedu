@@ -47,14 +47,14 @@ class AskCreateUpdateSerializer(ModelSerializer):
         fields = [
             'user',
             'question',
-            'replay',
+            # 'replay',
         ]
 
-    def validate(self, data):
-        username = data.get("user", None)
-        user = User.Objects.get(username=username)
-        data['user'] = user
-        return data
+    # def validate(self, data):
+    #     username = data.get("user", None)
+    #     user = User.Objects.get(username=username)
+    #     data['user'] = user
+    #     return data
 
 class AskDetailSerializer(ModelSerializer):
     user = UserDetailSerializer(read_only=True)

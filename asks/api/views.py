@@ -59,8 +59,8 @@ class AskCreateAPIView(CreateAPIView):
     serializer_class = AskCreateUpdateSerializer
     permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
 
 #
 class AskDetailAPIView(RetrieveAPIView):
