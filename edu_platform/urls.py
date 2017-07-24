@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^api/users/', include("accounts.api.urls", namespace='users-api')),
     url(r'^api/answers/', include("answers.api.urls", namespace='answers-api')),
     url(r'^api/asks/', include("asks.api.urls", namespace='asks-api')),
+    url(r'^api/study/', include("study.api.urls", namespace='study-api')),
 
 ]
 
