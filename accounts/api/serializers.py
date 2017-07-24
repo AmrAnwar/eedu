@@ -18,20 +18,25 @@ ask_user = HyperlinkedIdentityField(
     lookup_field='username',
 )
 
-
 class UserDetailSerializer(ModelSerializer):
     questions_url = ask_user
+    group = SerializerMethodField()
     class Meta:
         model = User
         fields = [
             'username',
             'email',
-            'questions_url'
+            'questions_url',
+            'group',
             # 'first_name',
             # 'last_name',
         ]
 
-
+    def get_group(self,obj):
+        if not obj.is_staff or not obj.is_superuser:
+            return "normal"
+        else:
+            return "staff"
 
 class UserCreateSerializer(ModelSerializer):
     email = EmailField(label='Email Address')
@@ -100,8 +105,7 @@ class UserLoginSerializer(ModelSerializer):
     username = CharField(required=False, allow_blank=True)
     email = EmailField(label='Email Address', required=False, allow_blank=True)
     group = CharField(required=False, allow_blank=True)
-    questions_url = ask_user
-
+    # questions = ask_user
     class Meta:
         model = User
         fields = [
@@ -109,10 +113,8 @@ class UserLoginSerializer(ModelSerializer):
             'username',
             'email',
             'password',
-            'questions_url',
             # 'token',
             'group',
-
         ]
         extra_kwargs = {"password":
                             {"write_only": True}
@@ -141,7 +143,7 @@ class UserLoginSerializer(ModelSerializer):
         data['username'] = user_obj.username
         data['email'] = user_obj.email
         if not user_obj.is_staff or not user_obj.is_superuser:
-            data['group'] = "Normal"
+            data['group'] = "normal"
         else:
             data['group'] = "staff"
         return data

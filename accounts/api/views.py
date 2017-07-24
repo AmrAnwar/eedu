@@ -36,6 +36,7 @@ User = get_user_model()
 from .serializers import (
     UserCreateSerializer,
     UserLoginSerializer,
+    UserDetailSerializer,
 )
 
 
@@ -44,13 +45,19 @@ class UserCreateAPIView(CreateAPIView):
     queryset = User.objects.all()
 
 
+class UserDetailAPIView(RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserDetailSerializer
+    lookup_field = 'username'
+
+
 class UserLoginAPIView(APIView):
     permission_classes = [AllowAny]
     serializer_class = UserLoginSerializer
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        serializer = UserLoginSerializer(data=data)
+        serializer = UserLoginSerializer(data=data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             new_data = serializer.data
             return Response(new_data, status=HTTP_200_OK)
