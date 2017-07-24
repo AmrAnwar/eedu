@@ -66,13 +66,19 @@ class UnitDetailSerializer(ModelSerializer):
 
 
 class UnitListSerializer(ModelSerializer):
-    url = unit_url
+    # url = unit_url
+    parts = SerializerMethodField()
     class Meta:
         model = Unit
         fields = [
             'id',
             'title',
-            'url',
+            # 'url',
+            'parts',
             'note',
             'timestamp',
     ]
+    def get_parts(self, obj):
+            c_qs = Part.objects.filter(unit = obj)
+            parts =PartDetailSerializer(c_qs, many=True).data
+            return parts
