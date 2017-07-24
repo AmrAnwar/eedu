@@ -50,11 +50,10 @@ class AskCreateUpdateSerializer(ModelSerializer):
             'replay',
         ]
 
-
     def validate(self, data):
         username = data.get("user", None)
         user = User.Objects.get(username=username)
-        data['username'] = user
+        data['user'] = user
         return data
 
 class AskDetailSerializer(ModelSerializer):
