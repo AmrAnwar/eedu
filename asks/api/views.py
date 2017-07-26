@@ -57,7 +57,6 @@ class AccountQuestionsAPIView(APIView):
 class AskCreateAPIView(CreateAPIView):
     queryset = Ask.objects.all()
     serializer_class = AskCreateUpdateSerializer
-    permission_classes = [IsAuthenticated]
 
     # def perform_create(self, serializer):
     #     serializer.save(user=self.request.user)
@@ -77,7 +76,7 @@ class AskUpdateAPIView(RetrieveUpdateAPIView):
     # permission_classes = [IsAdminUser]
 
     def perform_update(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save()
         #email send_email
 
 class AskDeleteAPIView(DestroyAPIView):

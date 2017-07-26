@@ -47,7 +47,7 @@ class AskCreateUpdateSerializer(ModelSerializer):
         fields = [
             'user',
             'question',
-            # 'replay',
+            'replay',
         ]
 
     # def validate(self, data):

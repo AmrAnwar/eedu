@@ -18,7 +18,7 @@ class Unit(models.Model):
 
 
     class Meta:
-        ordering = ["-timestamp"]
+        ordering = ["timestamp"]
 
     def __str__(self):
         return self.title
@@ -32,7 +32,7 @@ class Part(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["-timestamp"]
+        ordering = ["timestamp"]
 
     def __str__(self):
         return self.title
@@ -45,7 +45,7 @@ class Word(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["-timestamp"]
+        ordering = ["timestamp"]
 
     def __str__(self):
         return self.name
