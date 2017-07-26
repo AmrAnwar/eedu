@@ -7,11 +7,11 @@ from django.contrib import admin
 class AskAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('question',)
+            'fields': ('question', 'image_sender', 'file_sender')
         }),
         ('Advanced options', {
-            'classes': ('collapse',),
-            'fields': ('wait', 'replay'),
+            'classes': ('collapse'),
+            'fields': ('wait', 'replay', 'image_staff', 'file_staff'),
         }),
     )
 

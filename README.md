@@ -15,12 +15,12 @@ education platform API
 ---------------------
 * [x] api news
 * [x] api Answers
-* [ ] api ask
-* [ ] api words
+* [x] api ask
+* [x] api words
 * [ ] api comments
--------------------
+-----------------------
 * [x] token
--------------------------
+--------------------------
 * [ ] record
 
 _________Take Care__________
@@ -29,3 +29,6 @@ _________Take Care__________
 * Delete in Rest
 * user auth
 * get by
+* ask : text , record , image
+* ask to  news
+* red Hit

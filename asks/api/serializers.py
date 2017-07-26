@@ -33,6 +33,8 @@ class UserQuestionsSerializer(ModelSerializer):
         fields = [
             'question',
             'replay',
+            'image_sender',
+            'file_sender',
         ]
 
     # def get_questions(self, obj):
@@ -45,16 +47,19 @@ class AskCreateUpdateSerializer(ModelSerializer):
     class Meta:
         model = Ask
         fields = [
+            'id',
             'user',
             'question',
+            'image_sender',
+            'file_sender',
             'replay',
+            'image_staff',
+            'file_staff',
         ]
 
     # def validate(self, data):
-    #     username = data.get("user", None)
-    #     user = User.Objects.get(username=username)
-    #     data['user'] = user
-    #     return data
+
+
 
 class AskDetailSerializer(ModelSerializer):
     user = UserDetailSerializer(read_only=True)
@@ -66,10 +71,11 @@ class AskDetailSerializer(ModelSerializer):
             'id',
             'user',
             'question',
+            'image_sender',
+            'file_sender',
             'replay',
             'edit_url',
             'delete_url',
-
         ]
 
 
@@ -86,6 +92,8 @@ class AskListSerializer(ModelSerializer):
             'user',
             'question',
             'replay',
+            'image_sender',
+            'file_sender',
             'timestamp',
             'delete_url',
             'edit_url',

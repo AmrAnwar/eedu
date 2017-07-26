@@ -49,7 +49,7 @@ class AccountQuestionsAPIView(APIView):
 
     def get(self, request, username=None, format=None):
         user = User.objects.get(username=username)
-        queryset = Ask.objects.filter(user=user).filter(~Q(replay=None))
+        queryset = Ask.objects.filter(user=user).filter(wait=False)
         serializer = UserQuestionsSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -76,8 +76,11 @@ class AskUpdateAPIView(RetrieveUpdateAPIView):
     # permission_classes = [IsAdminUser]
 
     def perform_update(self, serializer):
-        serializer.save()
-        #email send_email
+        obj = serializer.save()
+        if (obj.replay or obj.image_staff or obj.file_staff):
+            obj.wait = False
+            obj.save()
+
 
 class AskDeleteAPIView(DestroyAPIView):
     queryset = Ask.objects.all()
@@ -94,7 +97,7 @@ class AskListAPIView(ListAPIView):
     pagination_class = PostPageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
-        queryset_list = Ask.objects.filter(replay=None)
+        queryset_list = Ask.objects.filter(wait=True) # .filter(image_sender=None).filter(file_sender=None)
         # query = self.request.GET.get("search")
         # if query:
         #     queryset_list = queryset_list.filter(
