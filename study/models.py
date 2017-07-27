@@ -6,6 +6,11 @@ from django.utils.text import slugify
 
 from django.contrib.auth.models import User
 
+choices_mcq = (
+    ('a', 'choice_one'),
+    ('b', 'choice_two'),
+    ('c', 'choice_three'),
+)
 # Create your models here.
 
 
@@ -35,7 +40,7 @@ class Part(models.Model):
         ordering = ["timestamp"]
 
     def __str__(self):
-        return self.title
+        return "%s : %s"%(self.unit,self.title)
 
 
 class Word(models.Model):
@@ -43,12 +48,52 @@ class Word(models.Model):
     translation = models.CharField(max_length=150)
     part = models.ForeignKey(Part, related_name='part')
     timestamp = models.DateTimeField(auto_now_add=True)
-
+    # likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
+    #                                related_name="comment_likes")
     class Meta:
         ordering = ["timestamp"]
 
     def __str__(self):
         return self.name
+
+
+class Test(models.Model):
+    title = models.CharField(max_length=255)
+    part = models.ForeignKey(Part, related_name='Test_Part')
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-timestamp"]
+
+
+class Choices(models.Model):
+    question = models.TextField(null=False)
+    choice_one = models.CharField(max_length=50, null=False)
+    choice_two = models.CharField(max_length=50, null=False)
+    choice_three = models.CharField(max_length=50, null=False)
+    answer = models.CharField(choices=choices_mcq, max_length=3)
+    test = models.ForeignKey(Test, related_name='Test_Choices')
+
+
+class Complete(models.Model):
+    description = models.TextField(null=False)
+    answer = models.CharField(max_length=50, null=False)
+    test = models.ForeignKey(Test, related_name='Test_Complete')
+
+
+class Dialog(models.Model):
+    description = models.TextField(null=False)
+    first_speaker = models.CharField(max_length=50, null=False)
+    second_speaker = models.CharField(max_length=50, null=False)
+    location = models.CharField(max_length=50, null=False)
+    test = models.ForeignKey(Test, related_name='Test_Dialog')
+
+
+class Mistake(models.Model):
+    description = models.TextField(null=False)
+    replace = models.CharField(max_length=50, null=False)
+    answer = models.CharField(max_length=50, null=False)
+    test = models.ForeignKey(Test, related_name='Test_Mistake')
 
 
 def create_slug(instance, new_slug=None):

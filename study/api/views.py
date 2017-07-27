@@ -60,3 +60,17 @@ class WordListAPIView(APIView):
         queryset = Word.objects.filter(part=part)
         serializer = WordDetailSerializer(queryset, context={'request': request})
         return Response(serializer.data)
+
+
+# class TestListAPIView(APIView):
+#     def get_object(self, slug):
+#         try:
+#             return Part.objects.get(slug=slug)
+#         except Part.DoesNotExist:
+#             raise Http404
+#
+#     def get(self, request, slug=None, format=None):
+#         part = Part.objects.get(slug=slug)
+#         queryset = Word.objects.filter(part=part)
+#         serializer = WordDetailSerializer(queryset, context={'request': request})
+#         return Response(serializer.data)

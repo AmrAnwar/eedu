@@ -3,7 +3,8 @@ from rest_framework.serializers import (
     HyperlinkedIdentityField,
     SerializerMethodField,
 )
-from study.models import Unit,Part,Word
+from study.models import Unit, Part, Word, Test
+from study import models
 from accounts.api.serializers import UserDetailSerializer
 
 unit_url = HyperlinkedIdentityField(
@@ -14,6 +15,8 @@ words_url = HyperlinkedIdentityField(
     view_name='study-api:part-detail',
     lookup_field='slug',
 )
+
+
 # answer_delete_url = HyperlinkedIdentityField(
 #     view_name='answers-api:delete',
 #     lookup_field='slug',
@@ -22,6 +25,84 @@ words_url = HyperlinkedIdentityField(
 #     view_name='answers-api:edit',
 #     lookup_field='slug',
 # )
+class DialogSerializer(ModelSerializer):
+    location = SerializerMethodField()
+    class Meta:
+        model = models.Dialog
+        fields = [
+            'description',
+            'first_speaker',
+            'second_speaker',
+            'location',
+        ]
+
+
+class MistakeSerializer(ModelSerializer):
+    class Meta:
+        model = models.Mistake
+        fields = [
+            'description',
+            'replace',
+            'answer',
+        ]
+
+class CompleteSerializer(ModelSerializer):
+    class Meta:
+        model = models.Complete
+        fields = [
+            'description',
+            'answer'
+        ]
+
+
+class ChoicesSerializer(ModelSerializer):
+    answer = SerializerMethodField()
+    class Meta:
+        model = models.Choices
+        fields = [
+            'question',
+            'choice_one',
+            'choice_two',
+            'choice_three',
+            'answer',
+        ]
+
+    def get_answer(self, obj):
+        return obj.get_answer_display()
+
+
+class TestSerializer(ModelSerializer):
+    choices = SerializerMethodField()
+    complete = SerializerMethodField()
+    mistake = SerializerMethodField()
+    dialog = SerializerMethodField()
+
+    class Meta:
+        model = Test
+        fields = [
+            'title',
+            'choices',
+            'complete',
+            'dialog',
+            'mistake',
+            # 'part',
+        ]
+
+    def get_choices(self, obj):
+        choices = models.Choices.objects.filter(test=obj)
+        return ChoicesSerializer(choices, many=True).data
+
+    def get_complete(self, obj):
+        complete = models.Complete.objects.filter(test=obj)
+        return CompleteSerializer(complete, many=True).data
+
+    def get_mistake(self, obj):
+        mistake = models.Mistake.objects.filter(test=obj)
+        return MistakeSerializer(mistake, many=True).data
+
+    def get_dialog(self, obj):
+        dialog = models.Dialog.objects.filter(test=obj)
+        return DialogSerializer(dialog, many=True).data
 
 
 class WordDetailSerializer(ModelSerializer):
@@ -35,21 +116,31 @@ class WordDetailSerializer(ModelSerializer):
 
 class PartDetailSerializer(ModelSerializer):
     words = SerializerMethodField()
+    tests = SerializerMethodField()
+
     class Meta:
         model = Part
         fields = [
             'id',
             'title',
-            'words'
+            'words',
+            'tests',
         ]
+
     def get_words(self, obj):
-            c_qs = Word.objects.filter(part=obj)
-            words =WordDetailSerializer(c_qs, many=True).data
-            return words
+        c_qs = Word.objects.filter(part=obj)
+        words = WordDetailSerializer(c_qs, many=True).data
+        return words
+
+    def get_tests(self, obj):
+        tests = Test.objects.filter(part=obj)
+        tests_ser = TestSerializer(tests, many=True).data
+        return tests_ser
 
 
 class UnitDetailSerializer(ModelSerializer):
     parts = SerializerMethodField()
+
     class Meta:
         model = Unit
         fields = [
@@ -60,14 +151,15 @@ class UnitDetailSerializer(ModelSerializer):
         ]
 
     def get_parts(self, obj):
-            c_qs = Part.objects.filter(unit = obj)
-            parts =PartDetailSerializer(c_qs, many=True).data
-            return parts
+        c_qs = Part.objects.filter(unit=obj)
+        parts = PartDetailSerializer(c_qs, many=True).data
+        return parts
 
 
 class UnitListSerializer(ModelSerializer):
     # url = unit_url
     parts = SerializerMethodField()
+
     class Meta:
         model = Unit
         fields = [
@@ -77,8 +169,9 @@ class UnitListSerializer(ModelSerializer):
             'parts',
             'note',
             'timestamp',
-    ]
+        ]
+
     def get_parts(self, obj):
-            c_qs = Part.objects.filter(unit = obj)
-            parts =PartDetailSerializer(c_qs, many=True).data
-            return parts
+        c_qs = Part.objects.filter(unit=obj)
+        parts = PartDetailSerializer(c_qs, many=True).data
+        return parts

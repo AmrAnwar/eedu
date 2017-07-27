@@ -9,7 +9,7 @@ education platform API
 * [x] ASK model
 * [x] words model
 * [x] data model & api
-* [ ] Tests(Exams)
+* [x] Tests(Exams)
 -------------------
 * [x] upload e-book(data test)
 ---------------------
@@ -17,7 +17,7 @@ education platform API
 * [x] api Answers
 * [x] api ask
 * [x] api words
-* [ ] api comments
+* [x] api tests
 -----------------------
 * [x] token
 --------------------------
