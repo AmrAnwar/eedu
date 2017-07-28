@@ -190,22 +190,22 @@ class PartDetailSerializer(ModelSerializer):
     def get_urltests(self, obj):
         return obj.get_url_tests()
 
-class UnitDetailSerializer(ModelSerializer):
-    parts = SerializerMethodField()
-
-    class Meta:
-        model = Unit
-        fields = [
-            'id',
-            'title',
-            'note',
-            'parts',
-        ]
-
-    def get_parts(self, obj):
-        c_qs = Part.objects.filter(unit=obj)
-        parts = PartDetailSerializer(c_qs, many=True).data
-        return parts
+# class UnitDetailSerializer(ModelSerializer):
+#     parts = SerializerMethodField()
+#
+#     class Meta:
+#         model = Unit
+#         fields = [
+#             'id',
+#             'title',
+#             'note',
+#             'parts',
+#         ]
+#
+#     def get_parts(self, obj):
+#         c_qs = Part.objects.filter(unit=obj)
+#         parts = PartDetailSerializer(c_qs, many=True).data
+#         return parts
 
 
 class UnitListSerializer(ModelSerializer):
@@ -224,4 +224,22 @@ class UnitListSerializer(ModelSerializer):
     def get_parts(self, obj):
         c_qs = Part.objects.filter(unit=obj)
         parts = PartDetailSerializer(c_qs, many=True).data
+        return parts
+
+class UnitListV1Serializer(ModelSerializer):
+    parts = SerializerMethodField()
+
+    class Meta:
+        model = Unit
+        fields = [
+            'id',
+            'title',
+            'parts',
+            'note',
+            'timestamp',
+        ]
+
+    def get_parts(self, obj):
+        c_qs = Part.objects.filter(unit=obj)
+        parts = PartDetailFullSerializer(c_qs, many=True).data
         return parts

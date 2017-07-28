@@ -25,7 +25,7 @@ from study.models import Unit,Part,Word
 
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (
-    UnitDetailSerializer,
+    UnitListV1Serializer,
     UnitListSerializer,
     WordDetailSerializer,
     PartDetailFullSerializer,
@@ -35,10 +35,10 @@ PartDetailTestSerializer,
 )
 
 
-class UnitDetailAPIView(RetrieveAPIView):
-    queryset = Unit.objects.all()
-    serializer_class = UnitDetailSerializer
-    lookup_field = 'slug'
+# class UnitDetailAPIView(RetrieveAPIView):
+#     queryset = Unit.objects.all()
+#     serializer_class = UnitDetailSerializer
+#     lookup_field = 'slug'
 
 
 class PartDetailWordsAPIView(RetrieveAPIView):
@@ -53,7 +53,7 @@ class PartDetailTestsAPIView(RetrieveAPIView):
     lookup_field = 'id'
 
 
-class UnitListAPIView(ListAPIView):
+class UnitListAPIViewV2(ListAPIView):
     serializer_class = UnitListSerializer
     # filter_backends = [SearchFilter, OrderingFilter]
     pagination_class = PostPageNumberPagination
@@ -61,6 +61,13 @@ class UnitListAPIView(ListAPIView):
         querset_list = Unit.objects.filter(wait=False)
         return querset_list
 
+
+class UnitListAPIViewV1(ListAPIView):
+    serializer_class = UnitListV1Serializer
+    pagination_class = PostPageNumberPagination
+    def get_queryset(self):
+        querset_list = Unit.objects.filter(wait=False)
+        return querset_list
 
 class PartListAPIView(ListAPIView):
     serializer_class = PartDetailFullSerializer
