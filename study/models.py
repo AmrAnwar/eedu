@@ -3,8 +3,9 @@ from __future__ import unicode_literals
 from django.db import models
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
-
+from django.shortcuts import reverse,redirect
 from django.contrib.auth.models import User
+from django_sites import reverse as sites_reverse
 
 choices_mcq = (
     ('a', 'choice_one'),
@@ -40,7 +41,13 @@ class Part(models.Model):
         ordering = ["timestamp"]
 
     def __str__(self):
-        return "%s : %s"%(self.unit,self.title)
+        return "%s : %s"%(self.unit, self.title)
+
+    def get_url_words(self):
+        return sites_reverse("study-api:part-words", kwargs={"id": self.id})
+
+    def get_url_tests(self):
+        return sites_reverse("study-api:part-tests", kwargs={"id": self.id})
 
 
 class Word(models.Model):

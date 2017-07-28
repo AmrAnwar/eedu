@@ -27,7 +27,11 @@ from .permissions import IsOwnerOrReadOnly
 from .serializers import (
     UnitDetailSerializer,
     UnitListSerializer,
-WordDetailSerializer,
+    WordDetailSerializer,
+    PartDetailFullSerializer,
+PartDetailSerializer,
+PartDetailWordSerializer,
+PartDetailTestSerializer,
 )
 
 
@@ -37,6 +41,16 @@ class UnitDetailAPIView(RetrieveAPIView):
     lookup_field = 'slug'
 
 
+class PartDetailWordsAPIView(RetrieveAPIView):
+    queryset = Part.objects.all()
+    serializer_class = PartDetailWordSerializer
+    lookup_field = 'id'
+
+
+class PartDetailTestsAPIView(RetrieveAPIView):
+    queryset = Part.objects.all()
+    serializer_class = PartDetailTestSerializer
+    lookup_field = 'id'
 
 
 class UnitListAPIView(ListAPIView):
@@ -45,6 +59,17 @@ class UnitListAPIView(ListAPIView):
     pagination_class = PostPageNumberPagination
     def get_queryset(self):
         querset_list = Unit.objects.filter(wait=False)
+        return querset_list
+
+
+class PartListAPIView(ListAPIView):
+    serializer_class = PartDetailFullSerializer
+    pagination_class = PostPageNumberPagination
+    def get_queryset(self):
+        querset_list = Part.objects.filter(wait=False)
+        q = self.request.GET.get("q")
+        if q:
+            querset_list = Part.objects.filter(id=int(q))
         return querset_list
 
 
@@ -58,7 +83,8 @@ class WordListAPIView(APIView):
     def get(self, request, slug=None, format=None):
         part = Part.objects.get(slug=slug)
         queryset = Word.objects.filter(part=part)
-        serializer = WordDetailSerializer(queryset, context={'request': request})
+        print queryset
+        serializer = WordDetailSerializer(queryset)
         return Response(serializer.data)
 
 

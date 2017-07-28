@@ -89,8 +89,6 @@ class AskDeleteAPIView(DestroyAPIView):
     lookup_field = 'id'
 
 
-
-
 class AskListAPIView(ListAPIView):
     serializer_class = AskListSerializer
     filter_backends = [SearchFilter, OrderingFilter]

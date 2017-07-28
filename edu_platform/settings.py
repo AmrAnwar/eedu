@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #
     'rest_framework',
+    'django_sites',
     #
     'study',
     'news',
@@ -150,6 +151,12 @@ REST_FRAMEWORK = {
     )
 }
 
+SITES = {
+    "dev": {"domain": "127.0.0.1:8000", "scheme": "http", "name": "localhost"},
+    "pro": {"domain": "educationplatform.pythonanywhere.com", "scheme": "https", "name": "educationplatform"},
+}
+
+SITE_ID = "pro"
 
 '''
 

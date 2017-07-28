@@ -5,17 +5,23 @@ from rest_framework.serializers import (
 )
 from study.models import Unit, Part, Word, Test
 from study import models
+from django.shortcuts import redirect, reverse
 from accounts.api.serializers import UserDetailSerializer
+from django.contrib.sites.shortcuts import get_current_site
+
 
 unit_url = HyperlinkedIdentityField(
     view_name='study-api:unit-detail',
     lookup_field='slug',
 )
-words_url = HyperlinkedIdentityField(
-    view_name='study-api:part-detail',
-    lookup_field='slug',
+# words_url = HyperlinkedIdentityField(
+#     view_name='study-api:part-detail',
+#     lookup_field='slug',
+# )
+part_url = HyperlinkedIdentityField(
+    view_name='study-api:part',
+    lookup_field='id',
 )
-
 
 # answer_delete_url = HyperlinkedIdentityField(
 #     view_name='answers-api:delete',
@@ -26,7 +32,6 @@ words_url = HyperlinkedIdentityField(
 #     lookup_field='slug',
 # )
 class DialogSerializer(ModelSerializer):
-    location = SerializerMethodField()
     class Meta:
         model = models.Dialog
         fields = [
@@ -113,11 +118,9 @@ class WordDetailSerializer(ModelSerializer):
             'translation',
         ]
 
-
-class PartDetailSerializer(ModelSerializer):
+class PartDetailFullSerializer(ModelSerializer):
     words = SerializerMethodField()
     tests = SerializerMethodField()
-
     class Meta:
         model = Part
         fields = [
@@ -137,6 +140,55 @@ class PartDetailSerializer(ModelSerializer):
         tests_ser = TestSerializer(tests, many=True).data
         return tests_ser
 
+class PartDetailTestSerializer(ModelSerializer):
+    tests = SerializerMethodField()
+    class Meta:
+        model = Part
+        fields = [
+            'id',
+            'title',
+            'tests',
+        ]
+
+    def get_tests(self, obj):
+        tests = Test.objects.filter(part=obj)
+        tests_ser = TestSerializer(tests, many=True).data
+        return tests_ser
+
+
+class PartDetailWordSerializer(ModelSerializer):
+    words = SerializerMethodField()
+    class Meta:
+        model = Part
+        fields = [
+            'id',
+            'title',
+            'words',
+        ]
+
+    def get_words(self, obj):
+        c_qs = Word.objects.filter(part=obj)
+        words = WordDetailSerializer(c_qs, many=True).data
+        return words
+
+
+class PartDetailSerializer(ModelSerializer):
+    urlwords = SerializerMethodField()
+    urltests = SerializerMethodField()
+    class Meta:
+        model = Part
+        fields = [
+            'id',
+            'urlwords',
+            'urltests',
+            'title',
+        ]
+
+    def get_urlwords(self, obj):
+        return obj.get_url_words()
+
+    def get_urltests(self, obj):
+        return obj.get_url_tests()
 
 class UnitDetailSerializer(ModelSerializer):
     parts = SerializerMethodField()
@@ -157,7 +209,6 @@ class UnitDetailSerializer(ModelSerializer):
 
 
 class UnitListSerializer(ModelSerializer):
-    # url = unit_url
     parts = SerializerMethodField()
 
     class Meta:
@@ -165,7 +216,6 @@ class UnitListSerializer(ModelSerializer):
         fields = [
             'id',
             'title',
-            # 'url',
             'parts',
             'note',
             'timestamp',
