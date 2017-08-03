@@ -32,9 +32,11 @@ class UserQuestionsSerializer(ModelSerializer):
         model = Ask
         fields = [
             'question',
-            'replay',
             'image_sender',
             'file_sender',
+            'replay',
+            'image_staff',
+            'file_staff',
         ]
 
     # def get_questions(self, obj):

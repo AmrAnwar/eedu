@@ -1,10 +1,9 @@
--f /usr/share/pip-wheels
 Django==1.11.3
 django-sites==0.9
 djangorestframework==3.3.3
 djangorestframework-jwt==1.11.0
 olefile==0.44
-Pillow==4.2.0
+Pillow==4.2.
 PyJWT==1.5.2
 pytz==2017.2
 whitenoise==3.3.0

@@ -17,7 +17,7 @@ choices_mcq = (
 
 class Unit(models.Model):
     title = models.CharField(max_length=255)
-    note = models.TextField(max_length=255)
+    note = models.TextField(max_length=255,null = True, blank = True)
     slug = models.SlugField(unique=True, null=True, blank=True)
     wait = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -103,7 +103,7 @@ class Mistake(models.Model):
     test = models.ForeignKey(Test, related_name='Test_Mistake')
 
 
-def create_slug(instance, new_slug=None):
+def create_slug_unit(instance, new_slug=None):
     slug = slugify(instance.title)
     if new_slug is not None:
         slug = new_slug
@@ -111,15 +111,30 @@ def create_slug(instance, new_slug=None):
     exists = qs.exists()
     if exists:
         new_slug = "%s-%s" % (slug, qs.first().id)
-        return create_slug(instance, new_slug=new_slug)
+        return create_slug_unit(instance, new_slug=new_slug)
     return slug
 
 
-def pre_save_post_receiver(sender, instance, *args, **kwargs):
+def pre_save_post_receiver_unit(sender, instance, *args, **kwargs):
     if not instance.slug:
-        instance.slug = create_slug(instance)
+        instance.slug = create_slug_unit(instance)
+
+def create_slug_part(instance, new_slug=None):
+    slug = slugify(instance.title)
+    if new_slug is not None:
+        slug = new_slug
+    qs = Part.objects.filter(slug=slug).order_by("-id")
+    exists = qs.exists()
+    if exists:
+        new_slug = "%s-%s" % (slug, qs.first().id)
+        return create_slug_part(instance, new_slug=new_slug)
+    return slug
 
 
-pre_save.connect(pre_save_post_receiver, sender=Part)
+def pre_save_post_receiver_part(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = create_slug_part(instance)
 
-pre_save.connect(pre_save_post_receiver, sender=Unit)
+pre_save.connect(pre_save_post_receiver_part, sender=Part)
+
+pre_save.connect(pre_save_post_receiver_unit, sender=Unit)

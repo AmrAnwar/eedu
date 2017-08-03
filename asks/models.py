@@ -24,7 +24,7 @@ def upload_location(instance, filename):
 # Create your models here.
 class Ask(models.Model):
     user = models.ForeignKey(User, null=False, default=1, related_name="sender")
-    question = models.TextField(null=False, blank=False)
+    question = models.TextField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     replay = models.TextField(null=True, blank=True)
     image_sender = models.ImageField(

@@ -73,8 +73,7 @@ class ChoicesSerializer(ModelSerializer):
         ]
 
     def get_answer(self, obj):
-        return obj.get_answer_display()
-
+        return (getattr(obj, (obj.get_answer_display())))
 
 class TestSerializer(ModelSerializer):
     choices = SerializerMethodField()

@@ -13,7 +13,7 @@ PartDetailTestsAPIView,
 )
 
 urlpatterns = [
-    url(r'^units/v1/$', UnitListAPIViewV1.as_view(), name='list-v1'),
+    url(r'^units/$', UnitListAPIViewV1.as_view(), name='list-v1'),
     url(r'^units/v2/$', UnitListAPIViewV2.as_view(), name='list-v2'),
     url(r'^parts/$', PartListAPIView.as_view(), name='list-parts'),
     url(r'^parts/words/(?P<id>[\d-]+)/$', PartDetailWordsAPIView.as_view(), name='part-words'),

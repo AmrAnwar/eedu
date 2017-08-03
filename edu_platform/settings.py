@@ -156,7 +156,7 @@ SITES = {
     "pro": {"domain": "educationplatform.pythonanywhere.com", "scheme": "https", "name": "educationplatform"},
 }
 
-SITE_ID = "dev"
+SITE_ID = "pro"
 
 '''
 
