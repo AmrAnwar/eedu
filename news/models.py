@@ -7,6 +7,9 @@ from django.db.models.signals import pre_save
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
 
+import requests
+import json
+
 User = get_user_model()
 
 types = (
@@ -53,8 +56,8 @@ class Post(models.Model):
     def __unicode__(self):
         return "%s:%s" % (self.user, self.title)
 
-    # def get_absolute_url(self):
-    #     return reverse("news:detail", kwargs={'slug': self.slug})
+        # def get_absolute_url(self):
+        #     return reverse("news:detail", kwargs={'slug': self.slug})
 
 
 def create_slug(instance, new_slug=None):
@@ -73,5 +76,19 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = create_slug(instance)
 
+    url = 'https://fcm.googleapis.com/fcm/send'
+    data = {'to': '/topics/news',
+            'data': {
+                'message_title': '%s' % (instance.title),
+                'message_body': '%s' % (instance.content),
+                'where': 'news'
+                }
+            }
+    headers = {
+        'Authorization': 'key=AIzaSyC6PljgOsaTz2fULnW8uIY0sYIJ0MrDWDA',
+        'Content-Type': 'application/json',
+    }
+
+    r = requests.post(url, data=json.dumps(data), headers=(headers))
 
 pre_save.connect(pre_save_post_receiver, sender=Post)
