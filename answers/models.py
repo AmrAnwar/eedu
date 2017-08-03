@@ -72,7 +72,7 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
             'data': {
                 'message_title': '%s' % (instance.title),
                 'message_body': '%s' % (instance.note),
-                'where': 'news'
+                'where': 'answers'
                 }
             }
     headers = {
