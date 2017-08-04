@@ -26,10 +26,10 @@ from .serializers import (
 class AnswerCreateAPIView(CreateAPIView):
     queryset = Answer.objects.all()
     serializer_class = AnswerCreateUpdateSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save()
 
 
 class AnswerDetailAPIView(RetrieveAPIView):
@@ -41,7 +41,7 @@ class AnswerUpdateAPIView(RetrieveUpdateAPIView):
     queryset = Answer.objects.all()
     serializer_class = AnswerCreateUpdateSerializer
     lookup_field = 'slug'
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
     #lookup_url_kwarg = "abc"
     def perform_update(self, serializer):
         serializer.save(user=self.request.user)

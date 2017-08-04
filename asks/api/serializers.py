@@ -62,7 +62,6 @@ class AskCreateUpdateSerializer(ModelSerializer):
     # def validate(self, data):
 
 
-
 class AskDetailSerializer(ModelSerializer):
     user = UserDetailSerializer(read_only=True)
     delete_url = ask_delete_url

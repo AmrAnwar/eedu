@@ -10,13 +10,14 @@ from rest_framework.serializers import (
     SerializerMethodField,
     ValidationError,
 )
-
+from accounts.models import UserProfile
 User = get_user_model()
 
 ask_user = HyperlinkedIdentityField(
     view_name='asks-api:questions',
     lookup_field='username',
 )
+
 
 class UserDetailSerializer(ModelSerializer):
     questions_url = ask_user
@@ -38,6 +39,25 @@ class UserDetailSerializer(ModelSerializer):
         else:
             return "staff"
 
+
+class UserProfileSerializer(ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = [
+            'username',
+            'token',
+            'group',
+            # 'first_name',
+            # 'last_name',
+        ]
+
+    def get_group(self,obj):
+        if not obj.is_staff or not obj.is_superuser:
+            return "normal"
+        else:
+            return "staff"
+
+
 class UserCreateSerializer(ModelSerializer):
     email = EmailField(label='Email Address')
     email2 = EmailField(label='Confirm Email')
@@ -51,7 +71,6 @@ class UserCreateSerializer(ModelSerializer):
             'email2',
             'password',
             'group',
-
         ]
         extra_kwargs = {"password":
                             {"write_only": True}
@@ -127,12 +146,9 @@ class UserLoginSerializer(ModelSerializer):
         password = data.get("password", None)
         if not email and not username:
             raise ValidationError("A username or email is required to login")
-        user = User.objects.filter(
-            Q(email=email) |
-            Q(username=username)
-        ).distinct()
-        user = user.exclude(email__isnull=True).exclude(email__iexact='')
-        print user
+        user = User.objects.filter(username=username)
+        # user = user.exclude(email__isnull=True).exclude(email__iexact='')
+        # print user
         if user.exists() and user.count() == 1:
             user_obj = user.first()
         else:

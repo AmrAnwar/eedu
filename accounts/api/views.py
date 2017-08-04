@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
+from rest_framework import viewsets
 
 from rest_framework.filters import (
     SearchFilter,
@@ -30,6 +31,9 @@ from rest_framework.permissions import (
 
 from news.api.permissions import IsOwnerOrReadOnly
 # from news.api.pagination import PostLimitOffsetPagination, PostPageNumberPagination
+from accounts.models import UserProfile
+
+
 
 User = get_user_model()
 
@@ -37,7 +41,17 @@ from .serializers import (
     UserCreateSerializer,
     UserLoginSerializer,
     UserDetailSerializer,
+UserProfileSerializer,
 )
+
+
+class UserProfileModelViewSet(viewsets.ModelViewSet):
+    serializer_class = UserProfileSerializer
+    # filter_backends = [SearchFilter, OrderingFilter]
+    # permission_classes = [IsOwnerOrReadOnly]
+    queryset = UserProfile.objects.all()
+    lookup_field = 'username'
+
 
 
 class UserCreateAPIView(CreateAPIView):

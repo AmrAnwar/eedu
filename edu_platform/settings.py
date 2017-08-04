@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_sites',
     #
+    'accounts',
     'study',
     'news',
     'answers',
@@ -48,6 +49,8 @@ INSTALLED_APPS = [
     'data',
 
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -140,8 +143,8 @@ REST_FRAMEWORK = {
     #     'rest_framework.parsers.JSONParser',
     # )
     "DEFAULT_AUTHENTICATION_CLASSES": (
-         'rest_framework.authentication.SessionAuthentication',
-         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        #  'rest_framework.authentication.SessionAuthentication',
+        #  'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         #'rest_framework.authentication.BasicAuthentication'
 
     ),
@@ -158,6 +161,11 @@ SITES = {
 
 SITE_ID = "pro"
 
+headers = {
+    'Authorization': 'key=AIzaSyC6PljgOsaTz2fULnW8uIY0sYIJ0MrDWDA',
+    'Content-Type': 'application/json',
+}
+
 '''
 
 curl -X POST -d "username=amr&password=amryu12345" http://127.0.0.1:8000/api/auth/token/
@@ -171,10 +179,5 @@ curl -X PUT -H "Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2Vy
 
 curl http://127.0.0.1:8000/api/comments/
 
+curl
 '''
-
-
-
-
-
-

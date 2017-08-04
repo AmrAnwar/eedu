@@ -18,9 +18,9 @@ def upload_location(instance, filename):
             new_id = 1
     return "data/%s/%s" % (new_id, filename)
 
-
+first_user = User.objects.all().first()
 class File(models.Model):
-    user = models.ForeignKey(User, default=1, null=False)
+    user = models.ForeignKey(User, default=first_user.id, null=False)
     title = models.CharField(null=False, max_length=50)
     note = models.TextField(null=False, blank=False)
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
