@@ -30,9 +30,14 @@ def upload_location(instance, filename):
 
 
 # Create your models here.
-first_user = User.objects.all().first()
+try:
+    first_user = User.objects.all().first()
+    first_user = first_user.id
+except:
+    first_user = 1
+
 class Post(models.Model):
-    user = models.ForeignKey(User, first_user.id, null=False)
+    user = models.ForeignKey(User, default=1, null=False)
     title = models.CharField(null=False, max_length=50)
     content = models.TextField(null=False, blank=False)
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)

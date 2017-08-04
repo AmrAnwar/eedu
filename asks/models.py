@@ -20,10 +20,14 @@ def upload_location(instance, filename):
             new_id = 1
     return "asks/%s/%s" % (new_id, filename)
 
-first_user = User.objects.all().first()
-# Create your models here.
+try:
+    first_user = User.objects.all().first()
+    first_user = first_user.id
+except:
+    first_user = 1
+    # Create your models here.
 class Ask(models.Model):
-    user = models.ForeignKey(User, null=False, default=first_user.id, related_name="sender")
+    user = models.ForeignKey(User, null=False, default=1, related_name="sender")
     question = models.TextField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     replay = models.TextField(null=True, blank=True)

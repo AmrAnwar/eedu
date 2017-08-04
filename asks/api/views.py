@@ -62,22 +62,22 @@ class AskCreateAPIView(CreateAPIView):
     queryset = Ask.objects.all()
     serializer_class = AskCreateUpdateSerializer
     #
-    def perform_create(self, serializer):
-        qs = User.objects.filter(is_staff=True)
-        print qs
-        if qs:
-            for user in qs:
-                token = UserProfile.objects.get(user=user).token
-                url = 'https://fcm.googleapis.com/fcm/send'
-                data = {'to': '%s'%(token),
-                        'data': {
-                            'message_title': '%s' % ("new question"),
-                            # 'message_body': '%s' % (obj),
-                            'where': 'asks-request'
-                        }
-                    }
-                req = requests.post(url, data=json.dumps(data), headers=(settings.headers))
-                print req.content
+    # def perform_create(self, serializer):
+    #     qs = User.objects.filter(is_staff=True)
+    #     print qs
+    #     if qs:
+    #         for user in qs:
+    #             token = UserProfile.objects.get(user=user).token
+    #             url = 'https://fcm.googleapis.com/fcm/send'
+    #             data = {'to': '%s'%(token),
+    #                     'data': {
+    #                         'message_title': '%s' % ("new question"),
+    #                         # 'message_body': '%s' % (obj),
+    #                         'where': 'asks-request'
+    #                     }
+    #                 }
+    #             req = requests.post(url, data=json.dumps(data), headers=(settings.headers))
+    #             print req.content
     # def perform_create(self, serializer):
     #     serializer.save(user=self.request.user)
 
@@ -100,16 +100,20 @@ class AskUpdateAPIView(RetrieveUpdateAPIView):
         if (obj.replay or obj.image_staff or obj.file_staff):
             obj.wait = False
             obj.save()
-            token = UserProfile.objects.get(user=obj.user).token
-            url = 'https://fcm.googleapis.com/fcm/send'
-            data = {'to': '%s'%(token),
-                    'data': {
-                        'message_title': '%s' % (obj.question),
-                        # 'message_body': '%s' % (obj),
-                        'where': 'asks-replay'
-                    }
-                }
-            req = requests.post(url, data=json.dumps(data), headers=(settings.headers))
+            try:
+                token = UserProfile.objects.get(user=obj.user).token
+                url = 'https://fcm.googleapis.com/fcm/send'
+                data = {'to': '%s' % (token),
+                        'data': {
+                            'message_title': '%s' % (obj.question),
+                            # 'message_body': '%s' % (obj),
+                            'where': 'asks-replay'
+                        }
+                        }
+                req = requests.post(url, data=json.dumps(data), headers=(settings.headers))
+            except:
+                print "check token"
+
 
 class AskDeleteAPIView(DestroyAPIView):
     queryset = Ask.objects.all()
