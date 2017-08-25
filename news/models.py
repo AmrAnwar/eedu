@@ -47,7 +47,7 @@ class Post(models.Model):
     type = models.CharField(choices=types, max_length=3, default=1)
     image = models.ImageField(
         upload_to=upload_location,
-        null=False, blank=False,
+        null=True, blank=True,
         height_field='height_field_image',
         width_field='width_field_image',
     )

@@ -1,12 +1,15 @@
 from __future__ import unicode_literals
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db.models.signals import pre_save, post_save
 from django.utils.text import slugify
 from django.contrib.contenttypes.models import ContentType
+from django.db.models.signals import post_delete
+
 import random
 import string
 
+User = get_user_model()
 
 class Group(models.Model):
     title = models.CharField(max_length=10)
@@ -27,18 +30,23 @@ def create_profile(sender, instance, **kwargs):
     if kwargs['created']:
             password = generate(8)
             instance.password = password
-            user = User.objects.create(username=instance.username, password=password)
+            user = User(username=instance.username,)
+            user.set_password(password)
             user.save()
             instance.user = user
             instance.save()
-    else:
-        user = instance.user
-        print instance.username
-        user.username = instance.username
-        user.save()
 
 
 post_save.connect(create_profile, sender=UserProfile)
+
+
+
+def delete_user(sender, instance, **kwargs):
+    if instance.user:
+        instance.user.delete()
+post_delete.connect(delete_user, sender=UserProfile)
+
+
 def generate(word_size):
     """
     return a string of len = (length) and each word in len random.randint(1,word_size)

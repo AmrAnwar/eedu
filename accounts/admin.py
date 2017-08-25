@@ -2,17 +2,21 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from django.contrib.auth.models import User
 from .models import UserProfile, Group
 
 
 class UserProfileAdmin(admin.ModelAdmin):
+    search_fields = ["username", "group"]
     list_display = ['username', 'password', 'group']
+
     fieldsets = (
         (None, {
             'fields': ('username', 'group')
         }),
     )
+    list_filter = ('group',)
+    class Meta:
+		model = UserProfile
 
 class UserAdmin(admin.TabularInline):
     fieldsets = (

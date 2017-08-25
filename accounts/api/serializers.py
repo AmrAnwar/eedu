@@ -34,7 +34,7 @@ class UserDetailSerializer(ModelSerializer):
         ]
 
     def get_group(self,obj):
-        if not obj.is_staff or not obj.is_superuser:
+        if not obj.is_staff and not obj.is_superuser:
             return "normal"
         else:
             return "staff"
@@ -52,7 +52,7 @@ class UserProfileSerializer(ModelSerializer):
         ]
 
     def get_group(self,obj):
-        if not obj.is_staff or not obj.is_superuser:
+        if not obj.is_staff and not obj.is_superuser:
             return "normal"
         else:
             return "staff"
@@ -158,7 +158,7 @@ class UserLoginSerializer(ModelSerializer):
                 raise ValidationError("Incorrect credentials please try again")
         data['username'] = user_obj.username
         data['email'] = user_obj.email
-        if not user_obj.is_staff or not user_obj.is_superuser:
+        if not user_obj.is_staff and not user_obj.is_superuser:
             data['group'] = "normal"
         else:
             data['group'] = "staff"

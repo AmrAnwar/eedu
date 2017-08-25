@@ -10,14 +10,14 @@ post_url = HyperlinkedIdentityField(
     view_name='news-api:detail',
     lookup_field='slug',
 )
-post_delete_url = HyperlinkedIdentityField(
-    view_name='news-api:delete',
-    lookup_field='slug',
-)
-post_edit_url = HyperlinkedIdentityField(
-    view_name='news-api:edit',
-    lookup_field='slug',
-)
+# post_delete_url = HyperlinkedIdentityField(
+#     view_name='news-api:delete',
+#     lookup_field='slug',
+# )
+# post_edit_url = HyperlinkedIdentityField(
+#     view_name='news-api:edit',
+#     lookup_field='slug',
+# )
 
 
 class PostCreateUpdateSerializer(ModelSerializer):
@@ -36,8 +36,8 @@ class PostCreateUpdateSerializer(ModelSerializer):
 
 class PostDetailSerializer(ModelSerializer):
     user = UserDetailSerializer(read_only=True)
-    delete_url = post_delete_url
-    edit_url = post_edit_url
+    # delete_url = post_delete_url
+    # edit_url = post_edit_url
     type = SerializerMethodField()
     class Meta:
         model = Post
@@ -50,8 +50,8 @@ class PostDetailSerializer(ModelSerializer):
             'timestamp',
             'content',
             'wait',
-            'delete_url',
-            'edit_url',
+            # 'delete_url',
+            # 'edit_url',
 
         ]
 
@@ -63,8 +63,8 @@ class PostListSerializer(ModelSerializer):
     user = UserDetailSerializer(read_only=True)
     type = SerializerMethodField()
     # url = post_url
-    delete_url = post_delete_url
-    edit_url = post_edit_url
+    # delete_url = post_delete_url
+    # edit_url = post_edit_url
 
     class Meta:
         model = Post
@@ -77,8 +77,8 @@ class PostListSerializer(ModelSerializer):
             'file',
             'content',
             'timestamp',
-            'delete_url',
-            'edit_url',
+            # 'delete_url',
+            # 'edit_url',
             #####
         ]
 
