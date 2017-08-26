@@ -3,21 +3,14 @@ from rest_framework.generics import (
     CreateAPIView,
     DestroyAPIView,
     ListAPIView,
-    UpdateAPIView,
     RetrieveAPIView,
     RetrieveUpdateAPIView
 )
-from rest_framework.permissions import (
-    AllowAny,
-    IsAuthenticated,
-    IsAdminUser,
-    IsAuthenticatedOrReadOnly,
-)
-from news.api.pagination import PostLimitOffsetPagination, PostPageNumberPagination
+
+from news.api.pagination import  PostPageNumberPagination
 
 from rest_framework.filters import SearchFilter, OrderingFilter
 from answers.models import Answer
-from .permissions import IsOwnerOrReadOnly
 from .serializers import (
     AnswerDetailSerializer,
     AnswerListSerializer,

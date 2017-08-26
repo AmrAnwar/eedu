@@ -1,8 +1,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.db.models.signals import pre_save, post_save
-from django.utils.text import slugify
+from django.db.models.signals import post_save
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_delete
 
@@ -20,10 +19,11 @@ class Group(models.Model):
 
 class UserProfile(models.Model):
     group = models.ForeignKey(Group)
-    user = models.OneToOneField(User, default=1)
+    user = models.OneToOneField(User, default=1, related_name='profile')
     username = models.CharField(max_length=20, default="null")
     password = models.CharField(max_length=25)
     token = models.CharField(max_length=500)
+    login = models.BooleanField(default=False)
 
 
 def create_profile(sender, instance, **kwargs):

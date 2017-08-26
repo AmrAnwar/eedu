@@ -1,6 +1,4 @@
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
-from django.db.models import Q
 
 from rest_framework.serializers import (
     CharField,
@@ -158,9 +156,13 @@ class UserLoginSerializer(ModelSerializer):
                 raise ValidationError("Incorrect credentials please try again")
         data['username'] = user_obj.username
         data['email'] = user_obj.email
+        if user_obj.profile.login:
+            raise ValidationError("User actually login")
+        # print user_obj.profile, "Serializer"
         if not user_obj.is_staff and not user_obj.is_superuser:
             data['group'] = "normal"
         else:
             data['group'] = "staff"
         data['id'] = user_obj.id
+
         return data

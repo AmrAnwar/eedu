@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth import get_user_model
-import re
 User = get_user_model()
 
 def upload_location(instance, filename):
@@ -26,10 +25,13 @@ try:
 except:
     first_user = 1
     # Create your models here.
+
+
 class Ask(models.Model):
     user = models.ForeignKey(User, null=False, default=1, related_name="sender")
     question = models.TextField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True, auto_now_add=False)
     replay = models.TextField(null=True, blank=True)
     image_sender = models.ImageField(
         upload_to=upload_location,
@@ -52,7 +54,7 @@ class Ask(models.Model):
     wait = models.BooleanField(default=True)
 
     class Meta:
-        ordering = ["-timestamp"]
+        ordering = ["-updated"]
 
     def __unicode__(self):
         return "From: %s, Question num: %s" %(self.user, self.id)

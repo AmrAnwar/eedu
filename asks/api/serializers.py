@@ -3,7 +3,6 @@ from rest_framework.serializers import (
     HyperlinkedIdentityField,
     SerializerMethodField,
 )
-from django.db.models import Q
 
 from asks.models import Ask
 from accounts.api.serializers import UserDetailSerializer
