@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Group: {{ group.title }}</title>
+<style>
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 2px solid #dddddd;
+    text-align: left;
+    padding: 30px;
+
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+<h1> Group: {{ group.title }}</h1>
+<table>
+  <tr>
+    <th>username</th>
+    <th>passsword</th>
+  </tr>
+    {% for profile in profiles %}
+        <tr>
+        <td><font size="10"> {{ profile.user }}</font></td>
+        <td><font size="10"> {{ profile.password }}</font></td>
+        </tr>
+
+    {% endfor %}
+
+</table>
+
+</body>
+</html>

@@ -4,17 +4,22 @@ from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_delete
+from django.core.urlresolvers import reverse
 
 import random
 import string
 
 User = get_user_model()
 
+
 class Group(models.Model):
     title = models.CharField(max_length=10)
 
     def __str__(self):
         return self.title
+
+    def get_url(self):
+        return reverse("users:profiles", kwargs={'id': self.id})
 
 
 class UserProfile(models.Model):

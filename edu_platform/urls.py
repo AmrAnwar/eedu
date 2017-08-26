@@ -27,11 +27,11 @@ from django.conf.urls import include, url
 # from rest_framework.documentation import include_docs_urls
 
 
-
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/auth/token/', obtain_jwt_token),
     url(r'^api/news/', include("news.api.urls", namespace='news-api')),
+    url(r'^users/', include("accounts.urls", namespace='users')),
     url(r'^api/users/', include("accounts.api.urls", namespace='users-api')),
     url(r'^api/answers/', include("answers.api.urls", namespace='answers-api')),
     url(r'^api/asks/', include("asks.api.urls", namespace='asks-api')),
