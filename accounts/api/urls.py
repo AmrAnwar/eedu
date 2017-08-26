@@ -5,12 +5,15 @@ from .views import (
     UserLoginAPIView,
     UserDetailAPIView,
     UserProfileModelViewSet,
-    UserLogoutAPIView
+    UserLogoutAPIView,
+    UserLoginTestAPIView,
 )
 
 urlpatterns = [
 
     url(r'^login/$', UserLoginAPIView.as_view(), name='login'),
+    url(r'^login/test/$', UserLoginTestAPIView.as_view(), name='login'),
+
     url(r'^register/$', UserCreateAPIView.as_view(), name='register'),
     url(r'^(?P<username>[\w-]+)/$', UserDetailAPIView.as_view(), name='detail'),
     url(r'^(?P<id>[\w-]+)/logout/$', UserLogoutAPIView.as_view(), name='logout'),

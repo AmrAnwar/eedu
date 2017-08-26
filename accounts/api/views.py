@@ -55,7 +55,7 @@ class UserLogoutAPIView(APIView):
         return Response(data={'detail': 'logout fail'}, status=HTTP_400_BAD_REQUEST)
 
 
-class UserLoginAPIView(APIView):
+class UserLoginTestAPIView(APIView):
     permission_classes = [AllowAny]
     serializer_class = UserLoginSerializer
 
@@ -71,6 +71,20 @@ class UserLoginAPIView(APIView):
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
+class UserLoginAPIView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserLoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = UserLoginSerializer(data=data, context={'request': request})
+        if serializer.is_valid(raise_exception=True):
+            new_data = serializer.data
+            user = User.objects.get(username=new_data.get('username'))
+            user.profile.login = False
+            user.profile.save()
+            return Response(new_data, status=HTTP_200_OK)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
 
