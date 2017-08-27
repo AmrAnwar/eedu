@@ -59,7 +59,7 @@ class Answer(models.Model):
 
 
 def create_slug(instance, new_slug=None):
-    slug = slugify(instance.title)
+    slug = slugify(instance.title,  allow_unicode=True)
     if new_slug is not None:
         slug = new_slug
     qs = Answer.objects.filter(slug=slug).order_by("-id")

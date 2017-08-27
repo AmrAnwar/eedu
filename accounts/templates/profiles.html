@@ -32,8 +32,8 @@ tr:nth-child(even) {
   </tr>
     {% for profile in profiles %}
         <tr>
-        <td><font size="10"> {{ profile.user }}</font></td>
-        <td><font size="10"> {{ profile.password }}</font></td>
+        <td>{{ profile.user.username }}</td>
+        <td>{{ profile.password }}</td>
         </tr>
 
     {% endfor %}

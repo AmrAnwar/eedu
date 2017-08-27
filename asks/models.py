@@ -54,7 +54,7 @@ class Ask(models.Model):
     wait = models.BooleanField(default=True)
 
     class Meta:
-        ordering = ["-updated"]
+        ordering = ["-updated", "-timestamp"]
 
     def __unicode__(self):
         return "From: %s, Question num: %s" %(self.user, self.id)

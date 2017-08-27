@@ -29,7 +29,8 @@ class UserProfile(models.Model):
     password = models.CharField(max_length=25)
     token = models.CharField(max_length=500)
     login = models.BooleanField(default=False)
-
+    # class Meta:
+    #     ordering = ["username"]
 
 def create_profile(sender, instance, **kwargs):
     if kwargs['created']:

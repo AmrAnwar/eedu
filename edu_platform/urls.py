@@ -37,7 +37,7 @@ urlpatterns = [
     url(r'^api/asks/', include("asks.api.urls", namespace='asks-api')),
     url(r'^api/study/', include("study.api.urls", namespace='study-api')),
 ]
-
+admin.site.site_header = "Mr Tawfiq App"
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

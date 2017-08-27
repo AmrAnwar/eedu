@@ -6,12 +6,12 @@ from .models import UserProfile, Group
 
 
 class UserProfileAdmin(admin.ModelAdmin):
-    search_fields = ["username", "group"]
+    search_fields = ["username"]
     list_display = ['username', 'password', 'group']
 
     fieldsets = (
         (None, {
-            'fields': ('username', 'group')
+            'fields': ('username', 'group', 'login')
         }),
     )
     list_filter = ('group',)

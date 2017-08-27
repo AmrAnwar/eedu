@@ -4,11 +4,15 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.db.models.signals import pre_save
+from django.db.models.signals import pre_delete
+
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
+from django.dispatch import receiver
 
 import requests
 import json
+import os
 
 User = get_user_model()
 
@@ -64,9 +68,14 @@ class Post(models.Model):
         # def get_absolute_url(self):
         #     return reverse("news:detail", kwargs={'slug': self.slug})
 
+    def delete_photo(self):
+        if self.image and os.path.isfile(self.image.path):
+            os.remove(self.image.path)
+            self.image = None
+
 
 def create_slug(instance, new_slug=None):
-    slug = slugify(instance.title)
+    slug = slugify(instance.title,  allow_unicode=True)
     if new_slug is not None:
         slug = new_slug
     qs = Post.objects.filter(slug=slug).order_by("-id")
@@ -80,20 +89,26 @@ def create_slug(instance, new_slug=None):
 def pre_save_post_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = create_slug(instance)
-
-    url = 'https://fcm.googleapis.com/fcm/send'
-    data = {'to': '/topics/news',
-            'data': {
-                'message_title': '%s' % (instance.title),
-                'message_body': '%s' % (instance.content),
-                'where': 'news'
+    if not instance.wait:
+        url = 'https://fcm.googleapis.com/fcm/send'
+        data = {'to': '/topics/news',
+                'data': {
+                    'message_title': '%s' % (instance.title),
+                    'message_body': '%s' % (instance.content),
+                    'where': 'news'
+                    }
                 }
-            }
-    headers = {
-        'Authorization': 'key=AIzaSyC6PljgOsaTz2fULnW8uIY0sYIJ0MrDWDA',
-        'Content-Type': 'application/json',
-    }
+        headers = {
+            'Authorization': 'key=AIzaSyC6PljgOsaTz2fULnW8uIY0sYIJ0MrDWDA',
+            'Content-Type': 'application/json',
+        }
 
-    r = requests.post(url, data=json.dumps(data), headers=(headers))
+        r = requests.post(url, data=json.dumps(data), headers=(headers))
 
 pre_save.connect(pre_save_post_receiver, sender=Post)
+
+
+@receiver(pre_delete, sender=Post)
+def delete_file_if_exists(sender, instance, *args, **kwargs):
+    instance.delete_photo()
+
