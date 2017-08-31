@@ -25,15 +25,25 @@ tr:nth-child(even) {
 </head>
 <body>
 <h1> Group: {{ group.title }}</h1>
+    <form method='GET' action='' class='row'>
+                    <input class='form-control' type='text' name='search'
+                           placeholder='Search Profiles' value='{{ request.GET.search }}'/>
+                    <span class='input-group-btn'>
+                        <button class='btn btn-default' type='submit'>Search
+                            <i class="fa fa-search"></i></button>
+                    </span>
+    </form>
 <table>
   <tr>
     <th>username</th>
     <th>passsword</th>
+    <th>id</th>
   </tr>
     {% for profile in profiles %}
         <tr>
         <td>{{ profile.user.username }}</td>
         <td>{{ profile.password }}</td>
+        <td>{{profile.id}}</td>
         </tr>
 
     {% endfor %}
