@@ -70,13 +70,14 @@ class MistakeInline(admin.TabularInline):
 
 
 class TestAdmin(admin.ModelAdmin):
-    list_display = ['title', 'timestamp', 'part', ]
+    list_display = ['title', 'timestamp', 'part',]
     fieldsets = (
         (None,{
-            'fields':('title', 'part',)
+            'fields':('title', 'part', 'type')
         }),
     )
     inlines = [ChoicesInline, DialogInline, CompleteInline, MistakeInline]
+
 
 admin.site.register(models.Unit, UnitAdmin)
 

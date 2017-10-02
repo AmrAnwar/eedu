@@ -18,8 +18,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from rest_framework.response import Response
 
-
-from study.models import Unit,Part,Word, WordBank, Exercise, Exam
+from study.models import Unit,Part,Word, WordBank, Exercise, Exam, Test
 
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (
@@ -32,9 +31,12 @@ from .serializers import (
     PartDetailTestSerializer,
     WordBankDetailSerializer,
     ExerciseSerializer,
-    ExamSerializer
+    ExamSerializer,
+    #
+    TestSerializer,
 )
 
+from django.contrib.auth.models import User
 
 
 class PartDetailWordsAPIView(RetrieveAPIView):
@@ -53,14 +55,26 @@ class UnitListAPIViewV2(ListAPIView):
     serializer_class = UnitListSerializer
     # filter_backends = [SearchFilter, OrderingFilter]
     pagination_class = PostPageNumberPagination
+
     def get_queryset(self):
         querset_list = Unit.objects.filter(wait=False)
         return querset_list
 
 
+class McqTestViw(ListAPIView):
+    serializer_class = TestSerializer
+    pagination_class = PostPageNumberPagination
+    queryset = Test.objects.filter(type=2)
+    # def get_queryset(self):
+    #     if self.request.GET.get('mcq'):
+    #         return Test.objects.filter(type=2)
+    #
+
+
 class UnitListAPIViewV1(ListAPIView):
     serializer_class = UnitListV1Serializer
     pagination_class = PostPageNumberPagination
+
     def get_queryset(self):
         querset_list = Unit.objects.filter(wait=False)
         return querset_list
@@ -142,6 +156,7 @@ class WordBankView(viewsets.ModelViewSet):
             user = get_object_or_404(User, id=user_id)
             qs = WordBank.objects.filter(user=user)
             return qs
+
 
 class ExerciseView(viewsets.ModelViewSet):
     serializer_class = ExerciseSerializer

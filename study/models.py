@@ -111,11 +111,19 @@ class Word(models.Model):
     def __str__(self):
         return self.name
 
-
 class Test(models.Model):
+    TYPE = (
+        (1, "GENERAL"),
+        (2, "MCQ"),
+    )
     title = models.CharField(max_length=255)
-    part = models.ForeignKey(Part, related_name='Test_Part')
+    part = models.ForeignKey(Part, related_name='Test_Part', null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    type = models.IntegerField(choices=TYPE, default=1)
+
+    def __str__(self):
+        return "test: %s" % self.title
 
     class Meta:
         ordering = ["-timestamp"]

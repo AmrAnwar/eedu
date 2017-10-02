@@ -12,7 +12,9 @@ from .views import (
     UserPartDetailWordsAPIView,
     WordBankView,
     ExerciseView,
-    ExamView
+    ExamView,
+McqTestViw,
+
     # TestListAPIView,
 )
 
@@ -21,6 +23,7 @@ from .views import (
 
 urlpatterns = [
     # url(r'^', include(router.urls)),
+    url(r'^mcq/$', McqTestViw.as_view(), name='mcq'),
     url(r'^exam/$', ExamView.as_view({'get': 'list',
                                              })),
     url(r'^exercise/$', ExerciseView.as_view({'get': 'list',
