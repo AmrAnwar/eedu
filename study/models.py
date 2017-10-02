@@ -15,6 +15,19 @@ choices_mcq = (
 # Create your models here.
 
 
+class WordBank(models.Model):
+    user = models.ForeignKey(User, related_name="word_bank")
+    name = models.CharField(max_length=150)
+    translation = models.CharField(max_length=150)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-timestamp"]
+
+    def __str__(self):
+        return self.name
+
+
 class Unit(models.Model):
     title = models.CharField(max_length=255)
     note = models.TextField(max_length=255,null = True, blank = True)
@@ -57,6 +70,9 @@ class Word(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     # likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
     #                                related_name="comment_likes")
+    users = models.ManyToManyField(User, related_name="words")
+
+
     class Meta:
         ordering = ["timestamp"]
 

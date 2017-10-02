@@ -1,6 +1,6 @@
 from django.db.models import Q
 from rest_framework.views import APIView
-
+from django.shortcuts import get_object_or_404
 from rest_framework.generics import (
     CreateAPIView,
     DestroyAPIView,
@@ -9,6 +9,8 @@ from rest_framework.generics import (
     RetrieveAPIView,
     RetrieveUpdateAPIView
 )
+from rest_framework import viewsets
+
 from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated,
@@ -21,7 +23,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from rest_framework.response import Response
 
-from study.models import Unit,Part,Word
+from study.models import Unit,Part,Word, WordBank
 
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (
@@ -29,16 +31,12 @@ from .serializers import (
     UnitListSerializer,
     WordDetailSerializer,
     PartDetailFullSerializer,
-PartDetailSerializer,
-PartDetailWordSerializer,
-PartDetailTestSerializer,
+    PartDetailSerializer,
+    PartDetailWordSerializer,
+    PartDetailTestSerializer,
+WordBankDetailSerializer,
 )
-
-
-# class UnitDetailAPIView(RetrieveAPIView):
-#     queryset = Unit.objects.all()
-#     serializer_class = UnitDetailSerializer
-#     lookup_field = 'slug'
+from django.contrib.auth.models import User
 
 
 class PartDetailWordsAPIView(RetrieveAPIView):
@@ -69,6 +67,7 @@ class UnitListAPIViewV1(ListAPIView):
         querset_list = Unit.objects.filter(wait=False)
         return querset_list
 
+
 class PartListAPIView(ListAPIView):
     serializer_class = PartDetailFullSerializer
     pagination_class = PostPageNumberPagination
@@ -81,29 +80,66 @@ class PartListAPIView(ListAPIView):
 
 
 class WordListAPIView(APIView):
-    def get_object(self, slug):
+    def get_object(self, id):
         try:
-            return Part.objects.get(slug=slug)
+            return Part.objects.get(id=id)
         except Part.DoesNotExist:
             raise Http404
 
-    def get(self, request, slug=None, format=None):
-        part = Part.objects.get(slug=slug)
+    def get(self, request, id=None, format=None):
+        part = Part.objects.get(id=id)
         queryset = Word.objects.filter(part=part)
-        print queryset
         serializer = WordDetailSerializer(queryset)
         return Response(serializer.data)
 
 
-# class TestListAPIView(APIView):
-#     def get_object(self, slug):
-#         try:
-#             return Part.objects.get(slug=slug)
-#         except Part.DoesNotExist:
-#             raise Http404
+class WordStarToggle(APIView):
+    def get(self, request, word_id=None, user_id=None, format=None):
+        word = get_object_or_404(Word, id=word_id)
+        user = get_object_or_404(User, id=user_id)
+        toggle = False
+        if user in word.users.all():
+            word.users.remove(user)
+        else:
+            word.users.add(user)
+            toggle = True
+        word.save()
+        data = {
+            "toggle": toggle,
+        }
+        return Response(data)
+
+
+# class UserPartDetailWordsAPIView(ListAPIView):
+#     serializer_class = WordDetailSerializer
 #
-#     def get(self, request, slug=None, format=None):
-#         part = Part.objects.get(slug=slug)
-#         queryset = Word.objects.filter(part=part)
-#         serializer = WordDetailSerializer(queryset, context={'request': request})
+#     def get(self, request, *args, **kwargs):
+#         self.user = get_object_or_404(User, id=kwargs.get('user_id'))
+#         self.part = get_object_or_404(Part, id=kwargs.get('part_id'))
+#         return super(UserPartDetailWordsAPIView, self).get(self, request)
+#
+#     def get_queryset(self):
+#         queryset = self.user.words.filter(part=self.part)
+#         serializer = WordDetailSerializer(queryset, many=True)
+#         print serializer
 #         return Response(serializer.data)
+
+class UserPartDetailWordsAPIView(APIView):
+    def get(self, request, part_id=None, user_id=None, format=None):
+        user = get_object_or_404(User, id=user_id)
+        part = get_object_or_404(Part, id=part_id)
+        queryset = user.words.filter(part=part)
+        serializer = WordDetailSerializer(queryset, many=True)
+        print serializer
+        return Response(serializer.data)
+
+
+class WordBankView(viewsets.ModelViewSet):
+    serializer_class = WordBankDetailSerializer
+    filter_backends = [SearchFilter]
+
+    def get_queryset(self):
+        user_id = self.request.GET.get("user")
+        user = get_object_or_404(User, id=user_id)
+        qs = WordBank.objects.filter(user=user)
+        return qs

@@ -3,7 +3,7 @@ from rest_framework.serializers import (
     HyperlinkedIdentityField,
     SerializerMethodField,
 )
-from study.models import Unit, Part, Word, Test
+from study.models import Unit, Part, Word, Test, WordBank
 from study import models
 from django.shortcuts import redirect, reverse
 from accounts.api.serializers import UserDetailSerializer
@@ -31,6 +31,8 @@ part_url = HyperlinkedIdentityField(
 #     view_name='answers-api:edit',
 #     lookup_field='slug',
 # )
+
+
 class DialogSerializer(ModelSerializer):
     class Meta:
         model = models.Dialog
@@ -75,6 +77,7 @@ class ChoicesSerializer(ModelSerializer):
     def get_answer(self, obj):
         return (getattr(obj, (obj.get_answer_display())))
 
+
 class TestSerializer(ModelSerializer):
     choices = SerializerMethodField()
     complete = SerializerMethodField()
@@ -113,9 +116,23 @@ class WordDetailSerializer(ModelSerializer):
     class Meta:
         model = Word
         fields = [
+            'id',
+            'name',
+            'translation',
+            'users',
+        ]
+
+
+class WordBankDetailSerializer(ModelSerializer):
+    class Meta:
+        model = WordBank
+        fields = [
+            'id',
+            'user',
             'name',
             'translation',
         ]
+
 
 class PartDetailFullSerializer(ModelSerializer):
     words = SerializerMethodField()
@@ -224,6 +241,7 @@ class UnitListSerializer(ModelSerializer):
         c_qs = Part.objects.filter(unit=obj)
         parts = PartDetailSerializer(c_qs, many=True).data
         return parts
+
 
 class UnitListV1Serializer(ModelSerializer):
     parts = SerializerMethodField()

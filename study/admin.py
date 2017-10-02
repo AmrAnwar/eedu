@@ -77,3 +77,8 @@ admin.site.register(models.Part, PartAdmin)
 # admin.site.register(models.Word, WordAdmin)
 
 admin.site.register(models.Test, TestAdmin)
+
+
+# new
+admin.site.register(models.Word)
+admin.site.register(models.WordBank)
