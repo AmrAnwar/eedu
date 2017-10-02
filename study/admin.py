@@ -5,15 +5,18 @@ from django.contrib import admin
 from . import models
 
 
+class ExeInline(admin.TabularInline):
+    model = models.Exercise
+    extra = 0
+
+
 class WordInline(admin.TabularInline):
     model = models.Word
+    extra = 0
 
 
 class WordAdmin(admin.ModelAdmin):
     list_display = ['name', 'translation', 'part', ]
-
-# class WordLikeAdmin(admin.ModelAdmin):
-#     list_display = ['name', 'translation', 'part', ]
 
 
 class UnitAdmin(admin.ModelAdmin):
@@ -39,6 +42,11 @@ class PartAdmin(admin.ModelAdmin):
         }),
     )
     inlines = [WordInline]
+
+
+class ExamAdmin(admin.ModelAdmin):
+    fields = ["title"]
+    inlines = [ExeInline]
 
 
 class ChoicesInline(admin.TabularInline):
@@ -78,8 +86,6 @@ admin.site.register(models.Part, PartAdmin)
 
 admin.site.register(models.Test, TestAdmin)
 
-
-# new
 admin.site.register(models.Word)
 admin.site.register(models.WordBank)
-admin.site.register(models.Exercise)
+admin.site.register(models.Exam, ExamAdmin)

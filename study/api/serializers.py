@@ -3,9 +3,8 @@ from rest_framework.serializers import (
     HyperlinkedIdentityField,
     SerializerMethodField,
 )
-from study.models import Unit, Part, Word, Test, WordBank, Exercise
+from study.models import Unit, Part, Word, Test, WordBank, Exercise, Exam
 from study import models
-
 
 
 
@@ -31,17 +30,6 @@ part_url = HyperlinkedIdentityField(
 #     lookup_field='slug',
 # )
 
-class ExerciseSerializer(ModelSerializer):
-
-    class Meta:
-        model = Exercise
-        fields = [
-            'id',
-            'question',
-            'answer',
-            'type'
-        ]
-
 
 class DialogSerializer(ModelSerializer):
     class Meta:
@@ -62,6 +50,7 @@ class MistakeSerializer(ModelSerializer):
             'replace',
             'answer',
         ]
+
 
 class CompleteSerializer(ModelSerializer):
     class Meta:
@@ -144,9 +133,33 @@ class WordBankDetailSerializer(ModelSerializer):
         ]
 
 
+class ExerciseSerializer(ModelSerializer):
+
+    class Meta:
+        model = Exercise
+        fields = [
+            'id',
+            'question',
+            'answer',
+            'exam',
+            'type',
+        ]
+
+
+class ExamSerializer(ModelSerializer):
+
+    class Meta:
+        model = Exam
+        fields = [
+            'title',
+            'id',
+        ]
+
+
 class PartDetailFullSerializer(ModelSerializer):
     words = SerializerMethodField()
     tests = SerializerMethodField()
+
     class Meta:
         model = Part
         fields = [
@@ -165,6 +178,7 @@ class PartDetailFullSerializer(ModelSerializer):
         tests = Test.objects.filter(part=obj)
         tests_ser = TestSerializer(tests, many=True).data
         return tests_ser
+
 
 class PartDetailTestSerializer(ModelSerializer):
     tests = SerializerMethodField()

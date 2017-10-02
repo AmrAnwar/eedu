@@ -18,7 +18,8 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from rest_framework.response import Response
 
-from study.models import Unit,Part,Word, WordBank, Exercise
+
+from study.models import Unit,Part,Word, WordBank, Exercise, Exam
 
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (
@@ -30,10 +31,10 @@ from .serializers import (
     PartDetailWordSerializer,
     PartDetailTestSerializer,
     WordBankDetailSerializer,
-    ExerciseSerializer
+    ExerciseSerializer,
+    ExamSerializer
 )
 
-from django.contrib.auth.models import User
 
 
 class PartDetailWordsAPIView(RetrieveAPIView):
@@ -148,8 +149,16 @@ class ExerciseView(viewsets.ModelViewSet):
     queryset = Exercise.objects.all()
 
     def get_queryset(self):
-        if self.request.GET.get("filter"):
-            type = self.request.GET.get("filter")
-            qs = Exercise.objects.filter(type=type)
-            return qs
+        if self.request.GET.get("exam"):
+            exam = self.request.GET.get("exam")
+            if self.request.GET.get("filter"):
+                type = self.request.GET.get("filter")
+                return  Exercise.objects.filter(exam=exam).filter(type=type)
+            return Exercise.objects.filter(exam=exam)
         return Exercise.objects.all()
+
+
+class ExamView(viewsets.ModelViewSet):
+    serializer_class = ExamSerializer
+    filter_backends = [SearchFilter]
+    queryset = Exam.objects.all()

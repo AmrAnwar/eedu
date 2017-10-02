@@ -11,7 +11,8 @@ from .views import (
     WordStarToggle,
     UserPartDetailWordsAPIView,
     WordBankView,
-    ExerciseView
+    ExerciseView,
+    ExamView
     # TestListAPIView,
 )
 
@@ -20,8 +21,10 @@ from .views import (
 
 urlpatterns = [
     # url(r'^', include(router.urls)),
+    url(r'^exam/$', ExamView.as_view({'get': 'list',
+                                             })),
     url(r'^exercise/$', ExerciseView.as_view({'get': 'list',
-                                              'post': 'create'})),
+                                              })),
     url(r'^bank/$', WordBankView.as_view({'get': 'list',
                                           'post': 'create'})),
 
