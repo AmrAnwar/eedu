@@ -42,6 +42,8 @@ class Exercise(models.Model):
     question = models.TextField()
     answer = models.TextField()
     type = models.IntegerField(choices=TYPE)
+    users = models.ManyToManyField(User, related_name="exercise")
+
 
     def __str__(self):
         return "%s" % self.question

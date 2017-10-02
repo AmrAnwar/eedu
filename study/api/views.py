@@ -168,7 +168,10 @@ class ExerciseView(viewsets.ModelViewSet):
             exam = self.request.GET.get("exam")
             if self.request.GET.get("filter"):
                 type = self.request.GET.get("filter")
-                return  Exercise.objects.filter(exam=exam).filter(type=type)
+                if self.request.GET.get("user_id"):
+                    user = get_object_or_404(User, id=int(self.request.GET.get("user_id")))
+                    return user.exercise.filter(exam=exam, type=type)
+                return Exercise.objects.filter(exam=exam).filter(type=type)
             return Exercise.objects.filter(exam=exam)
         return Exercise.objects.all()
 
@@ -177,3 +180,20 @@ class ExamView(viewsets.ModelViewSet):
     serializer_class = ExamSerializer
     filter_backends = [SearchFilter]
     queryset = Exam.objects.all()
+
+class ExeToggleView(APIView):
+    def get(self, request, exe_id=None, user_id=None, format=None):
+        exercise = get_object_or_404(Exercise, id=exe_id)
+        user = get_object_or_404(User, id=user_id)
+        toggle = False
+        if user in exercise.users.all():
+            exercise.users.remove(user)
+        else:
+            exercise.users.add(user)
+            toggle = True
+        exercise.save()
+        data = {
+            "toggle": toggle,
+        }
+        return Response(data)
+

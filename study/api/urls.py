@@ -13,8 +13,8 @@ from .views import (
     WordBankView,
     ExerciseView,
     ExamView,
-McqTestViw,
-
+    McqTestViw,
+    ExeToggleView,
     # TestListAPIView,
 )
 
@@ -28,6 +28,9 @@ urlpatterns = [
                                              })),
     url(r'^exercise/$', ExerciseView.as_view({'get': 'list',
                                               })),
+    url(r'^exetoggle/(?P<exe_id>[\d-]+)/(?P<user_id>[\d-]+)/', ExeToggleView.as_view(),
+        name="exe-toggle"),
+
     url(r'^bank/$', WordBankView.as_view({'get': 'list',
                                           'post': 'create'})),
 

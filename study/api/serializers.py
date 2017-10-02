@@ -143,6 +143,7 @@ class ExerciseSerializer(ModelSerializer):
             'answer',
             'exam',
             'type',
+            'users',
         ]
 
 
