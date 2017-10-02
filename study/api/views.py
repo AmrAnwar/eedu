@@ -136,10 +136,12 @@ class UserPartDetailWordsAPIView(APIView):
 
 class WordBankView(viewsets.ModelViewSet):
     serializer_class = WordBankDetailSerializer
+    # queryset = WordBank.objects.all()
     filter_backends = [SearchFilter]
 
     def get_queryset(self):
-        user_id = self.request.GET.get("user")
-        user = get_object_or_404(User, id=user_id)
-        qs = WordBank.objects.filter(user=user)
-        return qs
+        if self.request.GET.get("user"):
+            user_id = self.request.GET.get("user")
+            user = get_object_or_404(User, id=user_id)
+            qs = WordBank.objects.filter(user=user)
+            return qs

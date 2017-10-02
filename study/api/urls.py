@@ -14,9 +14,23 @@ UserPartDetailWordsAPIView,
 WordBankView,
     # TestListAPIView,
 )
+from rest_framework.routers import DefaultRouter
+from django.conf.urls import url, include
+
+# router = DefaultRouter()
+# router.register(r'bank', WordBankView, base_name='bank')
 
 urlpatterns = [
-    url(r'^bank/$', WordBankView.as_view({'get': 'list', 'post': 'create'})),
+    # url(r'^', include(router.urls)),
+
+    url(r'^bank/$', WordBankView.as_view({'get': 'list',
+                                          'post': 'create'})),
+
+    url(r'^bank/(?P<pk>\d+)/$', WordBankView.as_view({
+                                          'get': 'retrieve',
+                                          'delete': 'destroy',
+                                           'patch': 'update'})),
+
 
     url(r'^units/$', UnitListAPIViewV1.as_view(), name='list-v1'),
     url(r'^units/v2/$', UnitListAPIViewV2.as_view(), name='list-v2'),
