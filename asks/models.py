@@ -23,13 +23,6 @@ def upload_location(instance, filename):
             new_id = 1
     return "asks/%s/%s" % (new_id, filename)
 
-try:
-    first_user = User.objects.all().first()
-    first_user = first_user.id
-except:
-    first_user = 1
-    # Create your models here.
-
 
 class Ask(models.Model):
     user = models.ForeignKey(User, null=False, default=1, related_name="sender")
@@ -56,6 +49,8 @@ class Ask(models.Model):
     height_field_image = models.IntegerField(default=0,null=True)
     width_field_image = models.IntegerField(default=0, null=True)
     wait = models.BooleanField(default=True)
+    public = models.BooleanField(default=False)
+
 
     class Meta:
         ordering = ["-updated", "-timestamp"]

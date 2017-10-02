@@ -56,6 +56,7 @@ class AskCreateUpdateSerializer(ModelSerializer):
             'replay',
             'image_staff',
             'file_staff',
+            'public',
         ]
 
     # def validate(self, data):

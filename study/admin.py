@@ -82,3 +82,4 @@ admin.site.register(models.Test, TestAdmin)
 # new
 admin.site.register(models.Word)
 admin.site.register(models.WordBank)
+admin.site.register(models.Exercise)

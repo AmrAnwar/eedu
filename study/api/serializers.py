@@ -3,11 +3,10 @@ from rest_framework.serializers import (
     HyperlinkedIdentityField,
     SerializerMethodField,
 )
-from study.models import Unit, Part, Word, Test, WordBank
+from study.models import Unit, Part, Word, Test, WordBank, Exercise
 from study import models
-from django.shortcuts import redirect, reverse
-from accounts.api.serializers import UserDetailSerializer
-from django.contrib.sites.shortcuts import get_current_site
+
+
 
 
 unit_url = HyperlinkedIdentityField(
@@ -31,6 +30,17 @@ part_url = HyperlinkedIdentityField(
 #     view_name='answers-api:edit',
 #     lookup_field='slug',
 # )
+
+class ExerciseSerializer(ModelSerializer):
+
+    class Meta:
+        model = Exercise
+        fields = [
+            'id',
+            'question',
+            'answer',
+            'type'
+        ]
 
 
 class DialogSerializer(ModelSerializer):

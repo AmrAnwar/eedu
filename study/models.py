@@ -15,6 +15,23 @@ choices_mcq = (
 # Create your models here.
 
 
+
+class Exercise(models.Model):
+    TYPE = (
+        (1, "Situations"),
+        (2, "Dialog"),
+        (3, "Choices"),
+        (4, "Find the Mistake"),
+        (5, "Article"),  # can't remember the real name
+        (6, "Story"),
+        (7, "Translation"),
+        (8, "Paragraph"),
+    )
+    question = models.TextField()
+    answer = models.TextField()
+    type = models.IntegerField(choices=TYPE)
+
+
 class WordBank(models.Model):
     user = models.ForeignKey(User, related_name="word_bank")
     name = models.CharField(max_length=150)

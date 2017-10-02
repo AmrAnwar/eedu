@@ -11,19 +11,14 @@ from rest_framework.generics import (
 )
 from rest_framework import viewsets
 
-from rest_framework.permissions import (
-    AllowAny,
-    IsAuthenticated,
-    IsAdminUser,
-    IsAuthenticatedOrReadOnly,
-)
-from news.api.pagination import PostLimitOffsetPagination, PostPageNumberPagination
+
+from news.api.pagination import  PostPageNumberPagination
 
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from rest_framework.response import Response
 
-from study.models import Unit,Part,Word, WordBank
+from study.models import Unit,Part,Word, WordBank, Exercise
 
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (
@@ -34,8 +29,10 @@ from .serializers import (
     PartDetailSerializer,
     PartDetailWordSerializer,
     PartDetailTestSerializer,
-WordBankDetailSerializer,
+    WordBankDetailSerializer,
+    ExerciseSerializer
 )
+
 from django.contrib.auth.models import User
 
 
@@ -130,7 +127,6 @@ class UserPartDetailWordsAPIView(APIView):
         part = get_object_or_404(Part, id=part_id)
         queryset = user.words.filter(part=part)
         serializer = WordDetailSerializer(queryset, many=True)
-        print serializer
         return Response(serializer.data)
 
 
@@ -145,3 +141,15 @@ class WordBankView(viewsets.ModelViewSet):
             user = get_object_or_404(User, id=user_id)
             qs = WordBank.objects.filter(user=user)
             return qs
+
+class ExerciseView(viewsets.ModelViewSet):
+    serializer_class = ExerciseSerializer
+    filter_backends = [SearchFilter]
+    queryset = Exercise.objects.all()
+
+    def get_queryset(self):
+        if self.request.GET.get("filter"):
+            type = self.request.GET.get("filter")
+            qs = Exercise.objects.filter(type=type)
+            return qs
+        return Exercise.objects.all()

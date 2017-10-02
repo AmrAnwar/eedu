@@ -139,12 +139,9 @@ class AskListAPIView(ListAPIView):
     pagination_class = PostPageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
-        queryset_list = Ask.objects.filter(wait=True) # .filter(image_sender=None).filter(file_sender=None)
-        # query = self.request.GET.get("search")
-        # if query:
-        #     queryset_list = queryset_list.filter(
-        #         Q(title__icontains=query) |
-        #         Q(content__icontains=query) |
-        #         Q(user__username__icontains=query)
-        #     ).distinct()
+        queryset_list = Ask.objects.filter(wait=True)# .filter(image_sender=None).filter(file_sender=None)
+        query = self.request.GET.get("public")
+        print query
+        if query == "True" or query == "true":
+            queryset_list = Ask.objects.filter(wait=False).filter(public=True)
         return queryset_list
