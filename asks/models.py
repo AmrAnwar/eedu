@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from PIL import Image as Img
+import StringIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
 
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -58,3 +62,22 @@ class Ask(models.Model):
 
     def __unicode__(self):
         return "From: %s, Question num: %s" %(self.user, self.id)
+
+    def save(self, *args, **kwargs):
+        if self.wait:
+            if self.image_sender:
+                image = Img.open(StringIO.StringIO(self.image_sender.read()))
+                output = StringIO.StringIO()
+                image.save(output, format='JPEG', quality=30)
+                output.seek(0)
+                self.image_sender = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % self.image_sender.name, 'image/jpeg',
+                                                  output.len, None)
+        else:
+            if self.image_staff:
+                image = Img.open(StringIO.StringIO(self.image_staff.read()))
+                output = StringIO.StringIO()
+                image.save(output, format='JPEG', quality=30)
+                output.seek(0)
+                self.image_staff = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % self.image_staff.name, 'image/jpeg',
+                                                  output.len, None)
+        super(Ask, self).save(*args, **kwargs)

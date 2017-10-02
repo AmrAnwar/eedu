@@ -23,7 +23,7 @@ class Group(models.Model):
 
 class UserProfile(models.Model):
     group = models.ForeignKey(Group, related_name="users_group")
-    user = models.OneToOneField(User, related_name='profile')
+    user = models.OneToOneField(User,default=1, related_name='profile')
     username = models.CharField(max_length=20, default="null")
     password = models.CharField(max_length=25)
     token = models.CharField(max_length=500)
@@ -43,8 +43,6 @@ def create_profile(sender, instance, **kwargs):
             user.save()
             instance.user = user
             instance.save()
-            instance.user.username = instance.username
-            instance.user.save()
     instance.user.username = instance.username
     instance.user.save()
 
