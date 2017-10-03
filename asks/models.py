@@ -7,6 +7,9 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from django.db import models
 from django.contrib.auth import get_user_model
+import requests
+import json
+
 User = get_user_model()
 
 def upload_location(instance, filename):
@@ -66,22 +69,6 @@ class Ask(models.Model):
                 output.seek(0)
                 self.image_sender = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % self.image_sender.name, 'image/jpeg',
                                                   output.len, None)
-            # if self.public:
-            #     pass
-                # rl = 'https://fcm.googleapis.com/fcm/send'
-                # data = {'to': '/topics/news',
-                #         'data': {
-                #             'message_title': '%s' % (instance.title),
-                #             'message_body': '%s' % (instance.content),
-                #             'where': 'news'
-                #         }
-                #         }
-                # headers = {
-                #     'Authorization': 'key=AIzaSyC6PljgOsaTz2fULnW8uIY0sYIJ0MrDWDA',
-                #     'Content-Type': 'application/json',
-                # }
-                #
-                # r = requests.post(url, data=json.dumps(data), headers=(headers))
 
         else:
             if self.image_staff:
@@ -91,5 +78,20 @@ class Ask(models.Model):
                 output.seek(0)
                 self.image_staff = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % self.image_staff.name, 'image/jpeg',
                                                   output.len, None)
+            if self.public:
+                url = 'https://fcm.googleapis.com/fcm/send'
+                data = {'to': '/topics/public_question',
+                        'data': {
+                            'message_title': 'New Public Question Was Answered',
+                            'message_body': '',
+                            'where': 'public_question'
+                        }
+                        }
+                headers = {
+                    'Authorization': 'key=AIzaSyC6PljgOsaTz2fULnW8uIY0sYIJ0MrDWDA',
+                    'Content-Type': 'application/json',
+                }
+
+                r = requests.post(url, data=json.dumps(data), headers=(headers))
 
         super(Ask, self).save(*args, **kwargs)
