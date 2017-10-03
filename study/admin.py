@@ -12,6 +12,11 @@ class ExeInline(admin.TabularInline):
 
 class WordInline(admin.TabularInline):
     model = models.Word
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'translation')
+        }),
+    )
     extra = 0
 
 
@@ -24,22 +29,22 @@ class UnitAdmin(admin.ModelAdmin):
         (None, {
             'fields': ('title', 'wait', 'note',)
         }),
-        ('Advanced options', {
-            'classes': ('collapse',),
-            'fields': ('slug',),
-        }),
+        # ('Advanced options', {
+        #     'classes': ('collapse',),
+        #     'fields': ('slug',),
+        # }),
     )
 
 
 class PartAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('title', 'wait','unit')
+            'fields': ('title', 'wait', 'unit')
         }),
-        ('Advanced options', {
-            'classes': ('collapse',),
-            'fields': ('slug',),
-        }),
+        # ('Advanced options', {
+        #     'classes': ('collapse',),
+        #     'fields': ('slug',),
+        # }),
     )
     inlines = [WordInline]
 

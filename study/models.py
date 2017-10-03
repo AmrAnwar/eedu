@@ -33,8 +33,8 @@ class Exercise(models.Model):
         (2, "Dialog"),
         (3, "Choices"),
         (4, "Find the Mistake"),
-        (5, "Article"),  # can't remember the real name
-        (6, "Story"),
+        (5, "Passage"),
+        (6, "Novel"),
         (7, "Translation"),
         (8, "Paragraph"),
     )
@@ -43,7 +43,6 @@ class Exercise(models.Model):
     answer = models.TextField()
     type = models.IntegerField(choices=TYPE)
     users = models.ManyToManyField(User, related_name="exercise")
-
 
     def __str__(self):
         return "%s" % self.question
@@ -68,7 +67,6 @@ class Unit(models.Model):
     slug = models.SlugField(unique=True, null=True, blank=True)
     wait = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
-
 
     class Meta:
         ordering = ["timestamp"]

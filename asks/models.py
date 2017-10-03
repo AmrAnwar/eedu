@@ -51,7 +51,6 @@ class Ask(models.Model):
     wait = models.BooleanField(default=True)
     public = models.BooleanField(default=False)
 
-
     class Meta:
         ordering = ["-updated", "-timestamp"]
 
@@ -67,6 +66,23 @@ class Ask(models.Model):
                 output.seek(0)
                 self.image_sender = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % self.image_sender.name, 'image/jpeg',
                                                   output.len, None)
+            # if self.public:
+            #     pass
+                # rl = 'https://fcm.googleapis.com/fcm/send'
+                # data = {'to': '/topics/news',
+                #         'data': {
+                #             'message_title': '%s' % (instance.title),
+                #             'message_body': '%s' % (instance.content),
+                #             'where': 'news'
+                #         }
+                #         }
+                # headers = {
+                #     'Authorization': 'key=AIzaSyC6PljgOsaTz2fULnW8uIY0sYIJ0MrDWDA',
+                #     'Content-Type': 'application/json',
+                # }
+                #
+                # r = requests.post(url, data=json.dumps(data), headers=(headers))
+
         else:
             if self.image_staff:
                 image = Img.open(StringIO.StringIO(self.image_staff.read()))
@@ -75,4 +91,5 @@ class Ask(models.Model):
                 output.seek(0)
                 self.image_staff = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % self.image_staff.name, 'image/jpeg',
                                                   output.len, None)
+
         super(Ask, self).save(*args, **kwargs)
