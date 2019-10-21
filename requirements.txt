@@ -1,6 +1,6 @@
 certifi==2017.7.27.1
 chardet==3.0.4
-Django==1.11.3
+Django==1.11.23
 django-fcm==0.1.1
 django-sites==0.9
 djangorestframework==3.6.3
