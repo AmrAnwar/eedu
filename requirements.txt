@@ -14,5 +14,5 @@ PyJWT==1.5.2
 pytz==2017.2
 requests==2.18.3
 requests-toolbelt==0.8.0
-urllib3==1.22
+urllib3==1.26.5
 whitenoise==3.3.0
